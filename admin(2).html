@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fresh Mart | Admin Panel</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial;background:#f4f6f8;color:#182018}button,input,select{font:inherit}button{cursor:pointer;border:0}.layout{display:flex;min-height:100vh}.side{width:250px;background:#17212b;color:#fff;padding:24px 15px}.brand{font-size:23px;font-weight:800;padding:10px 12px 30px}.nav{width:100%;background:transparent;color:#cfd8df;text-align:left;padding:13px 12px;border-radius:8px;margin:3px 0}.nav.active,.nav:hover{background:#263744;color:#fff}.content{flex:1;padding:28px;overflow:auto}.header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.header h1{font-size:28px}.admin{background:#fff;padding:10px 14px;border-radius:9px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:#fff;border:1px solid #e2e6ea;border-radius:12px;padding:20px}.label{color:#6c747c;font-size:13px}.num{font-size:27px;font-weight:800;margin-top:8px}.section{background:#fff;border-radius:12px;padding:20px;margin-top:20px}.section h2{margin-bottom:16px}.reports{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}.report{border:1px solid #e3e6e8;padding:16px;border-radius:10px}.report strong{display:block;font-size:20px;margin-top:7px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #eee}.filter{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:15px}.filter input,.filter select{padding:10px;border:1px solid #d8dde0;border-radius:8px}.export{background:#17212b;color:#fff;padding:10px 14px;border-radius:8px}
+@media(max-width:800px){.side{width:70px}.brand{font-size:0}.brand:after{content:"🥬";font-size:25px}.nav{font-size:0;text-align:center}.nav:before{content:"•";font-size:22px}.cards{grid-template-columns:repeat(2,1fr)}.reports{grid-template-columns:1fr}.content{padding:18px}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side"><div class="brand">🥬 Fresh Mart</div><button class="nav active">Dashboard</button><button class="nav">Sales Reports</button><button class="nav">Orders</button><button class="nav">Payments</button><button class="nav">Products</button><button class="nav">Customers</button><button class="nav">Merchants</button><button class="nav">Settings</button></aside>
+<main class="content">
+<div class="header"><h1>Admin Dashboard</h1><div class="admin">Administrator ▾</div></div>
+<section class="cards">
+<div class="card"><div class="label">Today's Sales</div><div class="num">RM 0.00</div></div>
+<div class="card"><div class="label">Today's Orders</div><div class="num">0</div></div>
+<div class="card"><div class="label">Total Customers</div><div class="num">0</div></div>
+<div class="card"><div class="label">Pending Payments</div><div class="num">0</div></div>
+</section>
+<section class="section"><h2>Sales Overview</h2><div class="reports"><div class="report"><span class="label">Online Payment</span><strong>RM 0.00</strong></div><div class="report"><span class="label">QR Payment</span><strong>RM 0.00</strong></div><div class="report"><span class="label">Total Sales</span><strong>RM 0.00</strong></div></div></section>
+<section class="section"><h2>Reports</h2><div class="filter"><input type="date"><input type="date"><select><option>All Payment Methods</option><option>Online Payment</option><option>QR Payment</option></select><button class="export" onclick="alert('Report export will be connected next.')">Export Report</button></div><table class="table"><thead><tr><th>Date</th><th>Orders</th><th>Sales</th><th>Online</th><th>QR</th></tr></thead><tbody><tr><td colspan="5" style="text-align:center;color:#777;padding:25px">No report data yet.</td></tr></tbody></table></section>
+<section class="section"><h2>Top Selling Products</h2><table class="table"><thead><tr><th>Product</th><th>Units Sold</th><th>Sales</th></tr></thead><tbody><tr><td colspan="3" style="text-align:center;color:#777;padding:25px">No sales data yet.</td></tr></tbody></table></section>
+</main></div>
+</body></html>

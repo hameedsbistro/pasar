@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Fresh Mart | Merchant Portal</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial;background:#f5f7f5;color:#172017}button,input,select{font:inherit}button{cursor:pointer;border:0}
+.layout{display:flex;min-height:100vh}.side{width:245px;background:#143b24;color:#fff;padding:25px 16px}.brand{font-size:23px;font-weight:800;padding:10px 12px 28px}.navbtn{display:block;width:100%;text-align:left;background:transparent;color:#dce9df;padding:13px 12px;border-radius:9px;margin:4px 0}.navbtn.active,.navbtn:hover{background:#23623b;color:#fff}
+.content{flex:1;padding:28px;overflow:auto}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.topbar h1{font-size:28px}.user{background:#fff;padding:10px 14px;border-radius:10px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card{background:#fff;padding:20px;border-radius:13px;border:1px solid #e5e9e5}.card small{color:#718071}.value{font-size:25px;font-weight:800;margin-top:8px}.section{background:#fff;border-radius:13px;margin-top:22px;padding:20px}.section h2{margin-bottom:15px}.order{border:1px solid #e4e8e4;border-radius:10px;padding:15px;margin-bottom:10px;display:flex;justify-content:space-between;gap:15px}.badge{padding:6px 9px;border-radius:20px;background:#fff2cc;font-size:12px}.actions button{background:#176b3a;color:#fff;padding:8px 11px;border-radius:7px;margin:3px}.table{width:100%;border-collapse:collapse}.table th,.table td{text-align:left;padding:12px;border-bottom:1px solid #eee}.table input{width:100px;padding:8px;border:1px solid #ddd;border-radius:7px}.save{background:#176b3a;color:#fff;padding:8px 12px;border-radius:7px}
+@media(max-width:800px){.side{width:70px}.brand{font-size:0}.brand:after{content:"🥬";font-size:25px}.navbtn{font-size:0;text-align:center}.navbtn:before{content:"•";font-size:22px}.cards{grid-template-columns:repeat(2,1fr)}.content{padding:18px}.order{flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="layout">
+<aside class="side"><div class="brand">🥬 Fresh Mart</div><button class="navbtn active">Dashboard</button><button class="navbtn">Orders</button><button class="navbtn">Payments</button><button class="navbtn">Products</button><button class="navbtn">Categories</button><button class="navbtn">Reports</button><button class="navbtn">Settings</button></aside>
+<main class="content">
+<div class="topbar"><h1>Merchant Dashboard</h1><div class="user">Merchant ▾</div></div>
+<section class="cards"><div class="card"><small>Today's Sales</small><div class="value">RM 0.00</div></div><div class="card"><small>New Orders</small><div class="value">0</div></div><div class="card"><small>Pending Payments</small><div class="value">0</div></div><div class="card"><small>Products</small><div class="value">0</div></div></section>
+<section class="section"><h2>New Orders 🔔</h2><div id="orders"><div style="padding:25px;color:#777;text-align:center">No new orders.</div></div></section>
+<section class="section"><h2>Product Price Management</h2><table class="table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead><tbody id="productRows"><tr><td>Fresh Apples</td><td>Fresh Fruits</td><td><input value="6.90"></td><td><input value="100"></td><td><button class="save" onclick="alert('Supabase product update will be connected next.')">Save</button></td></tr><tr><td>Bananas</td><td>Fresh Fruits</td><td><input value="4.50"></td><td><input value="80"></td><td><button class="save" onclick="alert('Supabase product update will be connected next.')">Save</button></td></tr></tbody></table></section>
+</main></div>
+<script>
+let audioCtx;
+function newOrderSound(){audioCtx=audioCtx||new AudioContext();let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.frequency.value=800;g.gain.value=.08;o.start();o.stop(audioCtx.currentTime+.25)}
+</script>
+</body></html>
