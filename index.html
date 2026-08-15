@@ -3,119 +3,555 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#126b3a">
 <title>Pasarraya Hameeds - Fresh Mart</title>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
-html,body{margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:#f5f7f6;color:#17201b}
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-header{position:sticky;top:0;z-index:100;background:#126b3a;color:#fff;padding:10px 4%;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 10px #0003}
-.brand{display:flex;align-items:center;gap:10px}
-.brand img{width:45px;height:45px;border-radius:50%;object-fit:cover;background:#fff}
-.brand strong{display:block;font-size:18px}
-.brand small{opacity:.9}
-.header-actions{display:flex;gap:8px}
-.header-btn{border:0;border-radius:8px;padding:10px 13px;background:#fff;color:#126b3a;font-weight:bold}
-.hero{background:#fff;text-align:center;padding:38px 5%}
-.hero h1{margin:0 0 8px;font-size:clamp(28px,5vw,48px)}
-.hero p{color:#65716b;margin:0}
-.controls{display:flex;gap:10px;padding:18px 5%;flex-wrap:wrap}
-.controls input,.controls select{flex:1;min-width:180px;padding:12px;border:1px solid #ccd5cf;border-radius:9px;background:#fff}
-#products{padding:5px 5% 45px;display:grid;grid-template-columns:repeat(auto-fill,minmax(225px,1fr));gap:18px}
-.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 3px 14px #0001}
-.card img{width:100%;height:180px;object-fit:cover;background:#eee}
-.card-body{padding:15px}
-.card h3{margin:0 0 7px}
-.description{color:#68746d;font-size:14px;min-height:40px}
-.price{color:#126b3a;font-size:20px;font-weight:bold;margin:12px 0}
-.card select,.card input{width:100%;padding:10px;border:1px solid #ccd5cf;border-radius:8px;margin-bottom:8px}
-.add,.primary{width:100%;border:0;border-radius:8px;padding:11px;color:#fff;background:#126b3a;font-weight:bold}
-.modal{position:fixed;inset:0;background:#0008;z-index:1000;display:none;align-items:center;justify-content:center;padding:15px}
-.modal.show{display:flex}
-.modal-box{background:#fff;width:100%;max-width:600px;max-height:90vh;overflow:auto;border-radius:15px;padding:20px}
-.modal-head{display:flex;justify-content:space-between;align-items:center}
-.close{border:0;border-radius:50%;width:34px;height:34px;background:#eee;font-size:20px}
-.cart-row{display:flex;justify-content:space-between;gap:10px;border-bottom:1px solid #eee;padding:12px 0}
-.total{text-align:right;font-size:21px;font-weight:bold;margin-top:15px}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-weight:bold;margin-bottom:5px}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px;border:1px solid #ccd5cf;border-radius:8px}
-.qr{display:block;width:240px;max-width:100%;margin:15px auto}
-footer{background:#17201b;color:#fff;text-align:center;padding:25px 10px;font-size:13px}
+
+html,body{
+margin:0;
+padding:0;
+font-family:Arial,Helvetica,sans-serif;
+background:#f5f7f6;
+color:#17201b;
+}
+
+button,input,select,textarea{
+font:inherit;
+}
+
+button{
+cursor:pointer;
+}
+
+header{
+position:sticky;
+top:0;
+z-index:100;
+background:#126b3a;
+color:#fff;
+padding:10px 4%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+box-shadow:0 2px 10px #0003;
+}
+
+.brand{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.brand img{
+width:46px;
+height:46px;
+border-radius:50%;
+object-fit:cover;
+background:#fff;
+}
+
+.brand strong{
+display:block;
+font-size:18px;
+}
+
+.brand small{
+opacity:.9;
+}
+
+.header-actions{
+display:flex;
+gap:8px;
+}
+
+.header-btn{
+border:0;
+border-radius:8px;
+padding:10px 13px;
+background:#fff;
+color:#126b3a;
+font-weight:bold;
+}
+
+.hero{
+background:#fff;
+text-align:center;
+padding:38px 5%;
+}
+
+.hero h1{
+margin:0 0 8px;
+font-size:clamp(28px,5vw,48px);
+}
+
+.hero p{
+color:#65716b;
+margin:0;
+}
+
+.controls{
+display:flex;
+gap:10px;
+padding:18px 5%;
+flex-wrap:wrap;
+}
+
+.controls input,
+.controls select{
+flex:1;
+min-width:180px;
+padding:12px;
+border:1px solid #ccd5cf;
+border-radius:9px;
+background:#fff;
+}
+
+#products{
+padding:5px 5% 45px;
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(225px,1fr));
+gap:18px;
+}
+
+.card{
+background:#fff;
+border-radius:14px;
+overflow:hidden;
+box-shadow:0 3px 14px #0001;
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+background:#eee;
+}
+
+.card-body{
+padding:15px;
+}
+
+.card h3{
+margin:0 0 7px;
+}
+
+.description{
+color:#68746d;
+font-size:14px;
+min-height:40px;
+}
+
+.price{
+color:#126b3a;
+font-size:20px;
+font-weight:bold;
+margin:12px 0;
+}
+
+.card select,
+.card input{
+width:100%;
+padding:10px;
+border:1px solid #ccd5cf;
+border-radius:8px;
+margin-bottom:8px;
+}
+
+.add,
+.primary{
+width:100%;
+border:0;
+border-radius:8px;
+padding:11px;
+color:#fff;
+background:#126b3a;
+font-weight:bold;
+}
+
+.add:active,
+.primary:active{
+transform:scale(.98);
+}
+
+.modal{
+position:fixed;
+inset:0;
+background:#0008;
+z-index:1000;
+display:none;
+align-items:center;
+justify-content:center;
+padding:15px;
+}
+
+.modal.show{
+display:flex;
+}
+
+.modal-box{
+background:#fff;
+width:100%;
+max-width:600px;
+max-height:90vh;
+overflow:auto;
+border-radius:15px;
+padding:20px;
+}
+
+.modal-head{
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.close{
+border:0;
+border-radius:50%;
+width:34px;
+height:34px;
+background:#eee;
+font-size:20px;
+}
+
+.cart-row{
+display:flex;
+justify-content:space-between;
+gap:10px;
+border-bottom:1px solid #eee;
+padding:12px 0;
+}
+
+.cart-row button{
+padding:5px 8px;
+border:1px solid #ccc;
+background:#fff;
+border-radius:5px;
+}
+
+.total{
+text-align:right;
+font-size:21px;
+font-weight:bold;
+margin-top:15px;
+}
+
+.form-group{
+margin-bottom:12px;
+}
+
+.form-group label{
+display:block;
+font-weight:bold;
+margin-bottom:5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select{
+width:100%;
+padding:11px;
+border:1px solid #ccd5cf;
+border-radius:8px;
+}
+
+.notice{
+padding:10px;
+border-radius:8px;
+background:#f3f5f4;
+margin:10px 0;
+}
+
+.qr{
+display:block;
+width:240px;
+max-width:100%;
+margin:15px auto;
+}
+
+.empty{
+text-align:center;
+padding:30px;
+color:#65716b;
+}
+
+.loading{
+text-align:center;
+padding:30px;
+}
+
+footer{
+background:#17201b;
+color:#fff;
+text-align:center;
+padding:25px 10px;
+font-size:13px;
+}
+
 @media(max-width:600px){
-#products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-left:3%;padding-right:3%}
-.card img{height:135px}
-.card-body{padding:10px}
-.card h3{font-size:15px}
-.description{font-size:12px}
-.price{font-size:17px}
-.brand small{display:none}
-.header-btn{padding:8px 9px;font-size:12px}
+
+header{
+padding:9px 3%;
+}
+
+.brand img{
+width:40px;
+height:40px;
+}
+
+.brand strong{
+font-size:15px;
+}
+
+.brand small{
+display:none;
+}
+
+.header-btn{
+padding:8px 9px;
+font-size:12px;
+}
+
+.hero{
+padding:28px 4%;
+}
+
+#products{
+grid-template-columns:repeat(2,minmax(0,1fr));
+gap:10px;
+padding-left:3%;
+padding-right:3%;
+}
+
+.card img{
+height:135px;
+}
+
+.card-body{
+padding:10px;
+}
+
+.card h3{
+font-size:15px;
+}
+
+.description{
+font-size:12px;
+min-height:34px;
+}
+
+.price{
+font-size:17px;
+}
+
+.cart-row{
+font-size:13px;
+}
+
+.modal-box{
+padding:15px;
+}
 }
 </style>
 </head>
+
 <body>
+
 <header>
+
 <div class="brand">
-<img id="shopLogo" src="images/logo.png" alt="Pasarraya Hameeds">
+
+<img
+id="shopLogo"
+src="images/logo.png"
+alt="Pasarraya Hameeds"
+onerror="this.style.display='none'"
+>
+
 <div>
-<strong id="shopName">Pasarraya Hameeds</strong>
-<small>Fresh Mart</small>
+<strong id="shopName">
+Pasarraya Hameeds
+</strong>
+
+<small>
+Fresh Mart
+</small>
 </div>
+
 </div>
+
 <div class="header-actions">
-<button class="header-btn" onclick="openProfile()">Account</button>
-<button class="header-btn" onclick="openCart()">Cart (<span id="cartCount">0</span>)</button>
+
+<button
+class="header-btn"
+onclick="openProfile()"
+>
+Account
+</button>
+
+<button
+class="header-btn"
+onclick="openCart()"
+>
+Cart (<span id="cartCount">0</span>)
+</button>
+
 </div>
+
 </header>
+
+
 <section class="hero">
-<h1>Fresh Groceries, Delivered</h1>
-<p>Shop online from Pasarraya Hameeds.</p>
+
+<h1>
+Fresh Groceries, Delivered
+</h1>
+
+<p>
+Shop online from Pasarraya Hameeds.
+</p>
+
 </section>
+
+
 <section class="controls">
-<input id="search" type="search" placeholder="Search products..." oninput="renderProducts()">
-<select id="category" onchange="renderProducts()">
-<option value="">All Categories</option>
+
+<input
+id="search"
+type="search"
+placeholder="Search products..."
+oninput="renderProducts()"
+>
+
+<select
+id="category"
+onchange="renderProducts()"
+>
+
+<option value="">
+All Categories
+</option>
+
 </select>
+
 </section>
+
+
 <main id="products">
-<p>Loading products...</p>
-</main>
-<div id="cartModal" class="modal">
-<div class="modal-box">
-<div class="modal-head">
-<h2>Your Cart</h2>
-<button class="close" onclick="closeModal('cartModal')">×</button>
+
+<div class="loading">
+Loading products...
 </div>
+
+</main>
+
+
+<!-- CART -->
+
+<div
+id="cartModal"
+class="modal"
+>
+
+<div class="modal-box">
+
+<div class="modal-head">
+
+<h2>
+Your Cart
+</h2>
+
+<button
+class="close"
+onclick="closeModal('cartModal')"
+>
+×
+</button>
+
+</div>
+
 <div id="cartItems"></div>
-<div id="cartTotal" class="total">Total: RM 0.00</div>
+
+<div
+id="cartTotal"
+class="total"
+>
+Total: RM 0.00
+</div>
+
 <br>
-<button class="primary" onclick="openCheckout()">
+
+<button
+class="primary"
+onclick="openCheckout()"
+>
 Proceed to Checkout
 </button>
-</div>
+
 </div>
 
-<div id="loginModal" class="modal">
+</div>
+
+
+<!-- LOGIN -->
+
+<div
+id="loginModal"
+class="modal"
+>
+
 <div class="modal-box">
+
 <div class="modal-head">
-<h2>Customer Login</h2>
-<button class="close" onclick="closeModal('loginModal')">×</button>
+
+<h2>
+Customer Login
+</h2>
+
+<button
+class="close"
+onclick="closeModal('loginModal')"
+>
+×
+</button>
+
 </div>
 
 <div class="form-group">
-<label>Email</label>
-<input id="loginEmail" type="email">
+
+<label>
+Email
+</label>
+
+<input
+id="loginEmail"
+type="email"
+autocomplete="email"
+>
+
 </div>
 
 <div class="form-group">
-<label>Password</label>
-<input id="loginPassword" type="password">
+
+<label>
+Password
+</label>
+
+<input
+id="loginPassword"
+type="password"
+autocomplete="current-password"
+>
+
 </div>
 
-<button class="primary" onclick="customerLogin()">
+<button
+class="primary"
+onclick="customerLogin()"
+>
 Login
 </button>
 
@@ -123,128 +559,295 @@ Login
 Don't have an account?
 </p>
 
-<button class="primary" onclick="showRegister()">
+<button
+class="primary"
+onclick="showRegister()"
+>
 Create Account
 </button>
-</div>
+
 </div>
 
-<div id="registerModal" class="modal">
+</div>
+
+
+<!-- REGISTER -->
+
+<div
+id="registerModal"
+class="modal"
+>
+
 <div class="modal-box">
+
 <div class="modal-head">
-<h2>Create Account</h2>
-<button class="close" onclick="closeModal('registerModal')">×</button>
+
+<h2>
+Create Account
+</h2>
+
+<button
+class="close"
+onclick="closeModal('registerModal')"
+>
+×
+</button>
+
 </div>
 
 <div class="form-group">
-<label>Full Name</label>
-<input id="registerName">
+
+<label>
+Full Name
+</label>
+
+<input
+id="registerName"
+type="text"
+>
+
 </div>
 
 <div class="form-group">
-<label>Email</label>
-<input id="registerEmail" type="email">
+
+<label>
+Email
+</label>
+
+<input
+id="registerEmail"
+type="email"
+>
+
 </div>
 
 <div class="form-group">
-<label>Phone Number</label>
-<input id="registerPhone" type="tel">
+
+<label>
+Phone Number
+</label>
+
+<input
+id="registerPhone"
+type="tel"
+>
+
 </div>
 
 <div class="form-group">
-<label>Password</label>
-<input id="registerPassword" type="password">
+
+<label>
+Password
+</label>
+
+<input
+id="registerPassword"
+type="password"
+>
+
 </div>
 
-<button class="primary" onclick="customerRegister()">
+<button
+class="primary"
+onclick="customerRegister()"
+>
 Create Account
 </button>
-</div>
+
 </div>
 
-<div id="profileModal" class="modal">
+</div>
+
+
+<!-- PROFILE -->
+
+<div
+id="profileModal"
+class="modal"
+>
+
 <div class="modal-box">
+
 <div class="modal-head">
-<h2>Customer Account</h2>
-<button class="close" onclick="closeModal('profileModal')">×</button>
+
+<h2>
+Customer Account
+</h2>
+
+<button
+class="close"
+onclick="closeModal('profileModal')"
+>
+×
+</button>
+
 </div>
 
 <div class="form-group">
-<label>Full Name</label>
-<input id="profileName">
+
+<label>
+Full Name
+</label>
+
+<input
+id="profileName"
+type="text"
+>
+
 </div>
 
 <div class="form-group">
-<label>Email</label>
-<input id="profileEmail" type="email" readonly>
+
+<label>
+Email
+</label>
+
+<input
+id="profileEmail"
+type="email"
+readonly
+>
+
 </div>
 
 <div class="form-group">
-<label>Phone Number</label>
-<input id="profilePhone" type="tel">
+
+<label>
+Phone Number
+</label>
+
+<input
+id="profilePhone"
+type="tel"
+>
+
 </div>
 
 <div class="form-group">
-<label>Profile Picture</label>
-<input id="profilePicture" type="file"
-accept="image/jpeg,image/png,image/webp">
+
+<label>
+Profile Picture
+</label>
+
+<input
+id="profilePicture"
+type="file"
+accept="image/jpeg,image/png,image/webp"
+>
+
 </div>
 
-<button class="primary" onclick="saveProfile()">
+<button
+class="primary"
+onclick="saveProfile()"
+>
 Save Profile
 </button>
 
-<br><br>
+<br>
+<br>
 
-<button class="primary" onclick="logoutCustomer()">
+<button
+class="primary"
+onclick="logoutCustomer()"
+>
 Logout
 </button>
+
 </div>
+
 </div>
-<div id="checkoutModal" class="modal">
+
+
+<!-- CHECKOUT -->
+
+<div
+id="checkoutModal"
+class="modal"
+>
+
 <div class="modal-box">
 
 <div class="modal-head">
-<h2>Checkout</h2>
-<button class="close"
-onclick="closeModal('checkoutModal')">×</button>
+
+<h2>
+Checkout
+</h2>
+
+<button
+class="close"
+onclick="closeModal('checkoutModal')"
+>
+×
+</button>
+
 </div>
 
 <div class="form-group">
-<label>Delivery Address</label>
+
+<label>
+Delivery Address
+</label>
+
 <textarea
 id="deliveryAddress"
 rows="4"
-placeholder="Enter complete delivery address">
-</textarea>
+placeholder="Enter complete delivery address"
+></textarea>
+
 </div>
 
 <div class="form-group">
-<label>Delivery Location</label>
+
+<label>
+Delivery Location
+</label>
+
 <button
 class="primary"
-onclick="getCustomerLocation()">
+onclick="getCustomerLocation()"
+>
 Use My Current Location
 </button>
+
 </div>
 
-<input id="latitude" type="hidden">
-<input id="longitude" type="hidden">
+<input
+id="latitude"
+type="hidden"
+>
+
+<input
+id="longitude"
+type="hidden"
+>
+
 
 <div class="form-group">
-<label>Delivery Charge</label>
+
+<label>
+Delivery Charge
+</label>
+
 <input
 id="deliveryCharge"
 value="RM 0.00"
-readonly>
+readonly
+>
+
 </div>
 
+
 <div class="form-group">
-<label>Payment Method</label>
+
+<label>
+Payment Method
+</label>
 
 <select
 id="paymentMethod"
-onchange="showPaymentMethod()">
+onchange="showPaymentMethod()"
+>
 
 <option value="">
 Select Payment Method
@@ -259,15 +862,23 @@ QR Payment
 </option>
 
 </select>
+
 </div>
 
-<div id="paymentDetails"
-style="display:none">
 
-<div id="bankPayment"
-style="display:none">
+<div
+id="paymentDetails"
+style="display:none"
+>
 
-<h3>Bank Transfer</h3>
+<div
+id="bankPayment"
+style="display:none"
+>
+
+<h3>
+Bank Transfer
+</h3>
 
 <div id="bankAccounts">
 Loading bank accounts...
@@ -275,10 +886,15 @@ Loading bank accounts...
 
 </div>
 
-<div id="qrPayment"
-style="display:none">
 
-<h3>QR Payment</h3>
+<div
+id="qrPayment"
+style="display:none"
+>
+
+<h3>
+QR Payment
+</h3>
 
 <p>
 Scan the QR code to complete your payment.
@@ -288,9 +904,11 @@ Scan the QR code to complete your payment.
 id="paymentQR"
 class="qr"
 src="images/qr.png"
-alt="Payment QR">
+alt="Payment QR"
+>
 
 </div>
+
 
 <div class="form-group">
 
@@ -301,39 +919,46 @@ Upload Payment Receipt
 <input
 id="receiptFile"
 type="file"
-accept=".jpg,.jpeg,.png,.webp,.pdf">
+accept=".jpg,.jpeg,.png,.webp,.pdf"
+>
 
 </div>
 
 </div>
+
 
 <div
 id="checkoutSummary"
-class="total">
-
+class="total"
+>
 Total: RM 0.00
-
 </div>
 
 <br>
 
 <button
 class="primary"
-onclick="placeOrder()">
-
+onclick="placeOrder()"
+>
 Place Order
-
 </button>
 
 </div>
+
 </div>
 
 
-<div id="successModal" class="modal">
+<!-- SUCCESS -->
+
+<div
+id="successModal"
+class="modal"
+>
 
 <div
 class="modal-box"
-style="text-align:center">
+style="text-align:center"
+>
 
 <h2>
 Order Placed Successfully
@@ -347,10 +972,9 @@ Thank you for your order.
 
 <button
 class="primary"
-onclick="closeModal('successModal')">
-
+onclick="closeModal('successModal')"
+>
 Continue Shopping
-
 </button>
 
 </div>
@@ -362,9 +986,7 @@ Continue Shopping
 
 ©
 <span id="currentYear"></span>
-
 Pasarraya Hameeds (M) SDN BHD.
-
 All Rights Reserved.
 
 </footer>
@@ -372,9 +994,9 @@ All Rights Reserved.
 
 <script>
 
-/* =========================
-   SUPABASE
-========================= */
+/* =========================================
+   SUPABASE CONNECTION
+   ========================================= */
 
 const SUPABASE_URL =
 "https://lbcekixommklkkptmfdx.supabase.co";
@@ -389,9 +1011,9 @@ SUPABASE_ANON_KEY
 );
 
 
-/* =========================
-   APP VARIABLES
-========================= */
+/* =========================================
+   GLOBAL VARIABLES
+   ========================================= */
 
 let products = [];
 
@@ -404,9 +1026,9 @@ let currentUser = null;
 let customerProfile = null;
 
 
-/* =========================
-   START APP
-========================= */
+/* =========================================
+   START
+   ========================================= */
 
 document.addEventListener(
 "DOMContentLoaded",
@@ -429,44 +1051,68 @@ await loadProducts();
 
 }
 );
-  async function loadShopSettings(){
+
+
+/* =========================================
+   SHOP SETTINGS
+   ========================================= */
+
+async function loadShopSettings(){
 
 try{
 
-const {data,error} =
+const result =
 await supabaseClient
 .from("shop_settings")
 .select("*")
 .limit(1)
 .maybeSingle();
 
-if(error || !data) return;
+if(result.error){
+
+console.log(
+"shop_settings:",
+result.error.message
+);
+
+return;
+
+}
+
+const data = result.data;
+
+if(!data) return;
 
 if(data.shop_name){
 
-document.getElementById("shopName")
-.textContent =
+document.getElementById(
+"shopName"
+).textContent =
 data.shop_name;
 
 }
 
 if(data.logo_url){
 
-document.getElementById("shopLogo")
-.src =
+document.getElementById(
+"shopLogo"
+).src =
 data.logo_url;
 
 }
 
 if(data.qr_code_url){
 
-document.getElementById("paymentQR")
-.src =
+document.getElementById(
+"paymentQR"
+).src =
 data.qr_code_url;
 
 }
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
@@ -475,30 +1121,46 @@ console.error(error);
 }
 
 
+/* =========================================
+   CATEGORIES
+   ========================================= */
+
 async function loadCategories(){
 
 try{
 
-const {data,error} =
+const result =
 await supabaseClient
 .from("categories")
 .select("*")
 .order("name");
 
-if(error) return;
+if(result.error){
 
-categories = data || [];
+console.error(result.error);
+
+return;
+
+}
+
+categories =
+result.data || [];
 
 const select =
-document.getElementById("category");
+document.getElementById(
+"category"
+);
 
 select.innerHTML =
 '<option value="">All Categories</option>';
 
-categories.forEach(category=>{
+categories.forEach(
+function(category){
 
 const option =
-document.createElement("option");
+document.createElement(
+"option"
+);
 
 option.value =
 category.id;
@@ -506,11 +1168,16 @@ category.id;
 option.textContent =
 category.name;
 
-select.appendChild(option);
+select.appendChild(
+option
+);
 
-});
+}
+);
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
@@ -519,64 +1186,82 @@ console.error(error);
 }
 
 
+/* =========================================
+   PRODUCTS
+   ========================================= */
+
 async function loadProducts(){
 
-const container =
-document.getElementById("products");
+const box =
+document.getElementById(
+"products"
+);
 
 try{
 
-const {data,error} =
+const result =
 await supabaseClient
 .from("products")
 .select("*,categories(id,name)")
 .eq("status","active")
 .order("name");
 
-if(error){
+if(result.error){
 
-console.error(error);
+console.error(result.error);
 
-container.innerHTML =
-"<p>Unable to load products.</p>";
+box.innerHTML =
+'<div class="empty">Unable to load products.</div>';
 
 return;
 
 }
 
-products = data || [];
+products =
+result.data || [];
 
 renderProducts();
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
-container.innerHTML =
-"<p>Unable to load products.</p>";
+box.innerHTML =
+'<div class="empty">Unable to load products.</div>';
 
 }
 
 }
 
+
+/* =========================================
+   RENDER PRODUCTS
+   ========================================= */
 
 function renderProducts(){
 
-const container =
-document.getElementById("products");
+const box =
+document.getElementById(
+"products"
+);
 
 const search =
-document.getElementById("search")
-.value
+document.getElementById(
+"search"
+).value
 .toLowerCase()
 .trim();
 
 const category =
-document.getElementById("category")
-.value;
+document.getElementById(
+"category"
+).value;
 
 const list =
-products.filter(product=>{
+products.filter(
+function(product){
 
 const name =
 (product.name || "")
@@ -586,61 +1271,62 @@ const description =
 (product.description || "")
 .toLowerCase();
 
-const searchMatch =
+const matchesSearch =
 !search ||
 name.includes(search) ||
 description.includes(search);
 
-const categoryMatch =
+const matchesCategory =
 !category ||
 String(product.category_id) ===
 String(category);
 
-return searchMatch &&
-categoryMatch;
+return (
+matchesSearch &&
+matchesCategory
+);
 
-});
-
+}
+);
 
 if(!list.length){
 
-container.innerHTML =
-"<p>No products found.</p>";
+box.innerHTML =
+'<div class="empty">No products found.</div>';
 
 return;
 
 }
 
+box.innerHTML = "";
 
-container.innerHTML = "";
-
-
-list.forEach(product=>{
+list.forEach(
+function(product){
 
 const card =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 card.className =
 "card";
-
 
 card.innerHTML = `
 
 <img
 src="${esc(product.image_url || "images/product-placeholder.png")}"
-alt="${esc(product.name)}">
+alt="${esc(product.name || "")}"
+onerror="this.src='images/product-placeholder.png'"
+>
 
 <div class="card-body">
 
 <h3>
-${esc(product.name)}
+${esc(product.name || "")}
 </h3>
 
 <div class="description">
-${esc(
-product.description ||
-"Fresh quality product."
-)}
+${esc(product.description || "Fresh quality product.")}
 </div>
 
 <div class="price">
@@ -651,7 +1337,9 @@ ${
 product.has_variants
 ?
 `
-<select id="variant-${product.id}">
+<select
+id="variant-${product.id}"
+>
 <option value="">
 Select Variant
 </option>
@@ -665,21 +1353,22 @@ Select Variant
 id="qty-${product.id}"
 type="number"
 min="1"
-value="1">
+step="1"
+value="1"
+>
 
 <button
 class="add"
-onclick="addToCart('${product.id}')">
-
+onclick="addToCart('${product.id}')"
+>
 Add to Cart
-
 </button>
 
 </div>
+
 `;
 
-container.appendChild(card);
-
+box.appendChild(card);
 
 if(product.has_variants){
 
@@ -687,24 +1376,41 @@ loadVariants(product.id);
 
 }
 
-});
+}
+);
 
 }
 
 
-async function loadVariants(productId){
+/* =========================================
+   PRODUCT VARIANTS
+   ========================================= */
 
-const {data,error} =
+async function loadVariants(
+productId
+){
+
+try{
+
+const result =
 await supabaseClient
 .from("product_variants")
 .select("*")
-.eq("product_id",productId)
-.eq("status","active")
-.order("sort_order");
+.eq(
+"product_id",
+productId
+)
+.eq(
+"status",
+"active"
+)
+.order(
+"sort_order"
+);
 
-if(error){
+if(result.error){
 
-console.error(error);
+console.error(result.error);
 
 return;
 
@@ -717,11 +1423,13 @@ document.getElementById(
 
 if(!select) return;
 
-
-(data || []).forEach(variant=>{
+(result.data || []).forEach(
+function(variant){
 
 const option =
-document.createElement("option");
+document.createElement(
+"option"
+);
 
 option.value =
 variant.id;
@@ -734,12 +1442,15 @@ variant.name +
 " — RM " +
 money(variant.price);
 
-select.appendChild(option);
+select.appendChild(
+option
+);
 
-});
+}
+);
 
-
-select.onchange = function(){
+select.onchange =
+function(){
 
 const option =
 select.options[
@@ -748,36 +1459,60 @@ select.selectedIndex
 
 const product =
 products.find(
-p=>String(p.id) ===
-String(productId)
+function(item){
+
+return String(item.id) ===
+String(productId);
+
+}
 );
 
-const card =
-select.closest(".card");
+const price =
+option.dataset.price ||
+product.price;
 
-card.querySelector(".price")
+select.closest(
+".card"
+)
+.querySelector(
+".price"
+)
 .textContent =
 "RM " +
-money(
-option.dataset.price ||
-product.price
-);
+money(price);
 
 };
 
 }
 
+catch(error){
 
-function addToCart(productId){
+console.error(error);
+
+}
+
+}
+
+
+/* =========================================
+   ADD TO CART
+   ========================================= */
+
+function addToCart(
+productId
+){
 
 const product =
 products.find(
-p=>String(p.id) ===
-String(productId)
+function(item){
+
+return String(item.id) ===
+String(productId);
+
+}
 );
 
 if(!product) return;
-
 
 const quantity =
 Math.max(
@@ -789,9 +1524,7 @@ document.getElementById(
 ) || 1
 );
 
-
 let variant = null;
-
 
 if(product.has_variants){
 
@@ -810,18 +1543,16 @@ return;
 
 }
 
-
 const option =
 select.options[
 select.selectedIndex
 ];
 
-
 variant = {
 
-id: select.value,
+id:select.value,
 
-name: option.textContent,
+name:option.textContent,
 
 price:
 parseFloat(
@@ -832,32 +1563,36 @@ option.dataset.price
 
 }
 
-
 const price =
 variant
 ?
 variant.price
 :
-parseFloat(product.price) || 0;
-
+parseFloat(
+product.price
+) || 0;
 
 const existing =
-cart.find(item=>
+cart.find(
+function(item){
 
+return (
 String(item.product_id) ===
 String(productId) &&
-
 String(item.variant_id || "") ===
 String(variant?.id || "")
-
 );
 
+}
+);
 
 if(existing){
 
-existing.quantity += quantity;
+existing.quantity +=
+quantity;
 
-}else{
+}
+else{
 
 cart.push({
 
@@ -886,7 +1621,6 @@ quantity
 
 }
 
-
 saveCart();
 
 updateCartCount();
@@ -898,6 +1632,10 @@ alert(
 }
 
 
+/* =========================================
+   CART
+   ========================================= */
+
 function saveCart(){
 
 localStorage.setItem(
@@ -906,7 +1644,6 @@ JSON.stringify(cart)
 );
 
 }
-
 
 function loadCart(){
 
@@ -919,7 +1656,9 @@ localStorage.getItem(
 )
 ) || [];
 
-}catch(error){
+}
+
+catch(error){
 
 cart = [];
 
@@ -929,51 +1668,71 @@ updateCartCount();
 
 }
 
-
 function updateCartCount(){
 
 document.getElementById(
 "cartCount"
 ).textContent =
-
 cart.reduce(
-(total,item)=>
-total + Number(item.quantity),
+function(total,item){
+
+return total +
+Number(item.quantity);
+
+},
 0
 );
 
 }
-
 
 function subtotal(){
 
 return cart.reduce(
+function(total,item){
 
-(total,item)=>
-
-total +
+return total +
+(
 Number(item.price) *
-Number(item.quantity),
-
-0
-
+Number(item.quantity)
 );
 
-  }
-  function openCart(){
-renderCart();
-openModal("cartModal");
+},
+0
+);
+
 }
+
+
+/* =========================================
+   OPEN CART
+   ========================================= */
+
+function openCart(){
+
+renderCart();
+
+openModal(
+"cartModal"
+);
+
+}
+
+
+/* =========================================
+   RENDER CART
+   ========================================= */
 
 function renderCart(){
 
 const box =
-document.getElementById("cartItems");
+document.getElementById(
+"cartItems"
+);
 
 if(!cart.length){
 
 box.innerHTML =
-"<p>Your cart is empty.</p>";
+'<div class="empty">Your cart is empty.</div>';
 
 document.getElementById(
 "cartTotal"
@@ -986,10 +1745,13 @@ return;
 
 box.innerHTML = "";
 
-cart.forEach((item,index)=>{
+cart.forEach(
+function(item,index){
 
 const row =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
 row.className =
 "cart-row";
@@ -1005,9 +1767,12 @@ ${esc(item.name)}
 ${
 item.variant_name
 ?
-`<br><small>
+`
+<br>
+<small>
 ${esc(item.variant_name)}
-</small>`
+</small>
+`
 :
 ""
 }
@@ -1015,7 +1780,8 @@ ${esc(item.variant_name)}
 <br>
 
 RM ${money(item.price)}
-× ${item.quantity}
+×
+${item.quantity}
 
 </div>
 
@@ -1023,24 +1789,28 @@ RM ${money(item.price)}
 
 <strong>
 RM ${money(
-item.price * item.quantity
+item.price *
+item.quantity
 )}
 </strong>
 
 <br>
 
 <button
-onclick="changeQty(${index},-1)">
+onclick="changeQty(${index},-1)"
+>
 −
 </button>
 
 <button
-onclick="changeQty(${index},1)">
+onclick="changeQty(${index},1)"
+>
 +
 </button>
 
 <button
-onclick="removeItem(${index})">
+onclick="removeItem(${index})"
+>
 Remove
 </button>
 
@@ -1050,8 +1820,8 @@ Remove
 
 box.appendChild(row);
 
-});
-
+}
+);
 
 document.getElementById(
 "cartTotal"
@@ -1062,11 +1832,19 @@ money(subtotal());
 }
 
 
-function changeQty(index,change){
+/* =========================================
+   CART QUANTITY
+   ========================================= */
+
+function changeQty(
+index,
+change
+){
 
 if(!cart[index]) return;
 
-cart[index].quantity += change;
+cart[index].quantity +=
+change;
 
 if(cart[index].quantity <= 0){
 
@@ -1082,10 +1860,12 @@ renderCart();
 
 }
 
-
 function removeItem(index){
 
-cart.splice(index,1);
+cart.splice(
+index,
+1
+);
 
 saveCart();
 
@@ -1096,22 +1876,31 @@ renderCart();
 }
 
 
+/* =========================================
+   CHECKOUT
+   ========================================= */
+
 function openCheckout(){
 
 if(!cart.length){
 
-alert("Your cart is empty.");
+alert(
+"Your cart is empty."
+);
 
 return;
 
 }
 
-
 if(!currentUser){
 
-closeModal("cartModal");
+closeModal(
+"cartModal"
+);
 
-openModal("loginModal");
+openModal(
+"loginModal"
+);
 
 alert(
 "Please login before checkout."
@@ -1121,8 +1910,9 @@ return;
 
 }
 
-
-closeModal("cartModal");
+closeModal(
+"cartModal"
+);
 
 document.getElementById(
 "checkoutSummary"
@@ -1130,12 +1920,18 @@ document.getElementById(
 "Total: RM " +
 money(subtotal());
 
-openModal("checkoutModal");
+openModal(
+"checkoutModal"
+);
 
 loadBankAccounts();
 
 }
 
+
+/* =========================================
+   PAYMENT METHOD
+   ========================================= */
 
 function showPaymentMethod(){
 
@@ -1147,12 +1943,17 @@ document.getElementById(
 document.getElementById(
 "paymentDetails"
 ).style.display =
-method ? "block" : "none";
+method
+?
+"block"
+:
+"none";
 
 document.getElementById(
 "bankPayment"
 ).style.display =
-method === "bank_transfer"
+method ===
+"bank_transfer"
 ?
 "block"
 :
@@ -1161,7 +1962,8 @@ method === "bank_transfer"
 document.getElementById(
 "qrPayment"
 ).style.display =
-method === "qr"
+method ===
+"qr"
 ?
 "block"
 :
@@ -1169,6 +1971,10 @@ method === "qr"
 
 }
 
+
+/* =========================================
+   BANK ACCOUNTS
+   ========================================= */
 
 async function loadBankAccounts(){
 
@@ -1180,20 +1986,23 @@ document.getElementById(
 box.textContent =
 "Loading bank accounts...";
 
-
 try{
 
-const {data,error} =
+const result =
 await supabaseClient
 .from("bank_accounts")
 .select("*")
-.eq("status","active")
-.order("sort_order");
+.eq(
+"status",
+"active"
+)
+.order(
+"sort_order"
+);
 
+if(result.error){
 
-if(error ||
-!data ||
-!data.length){
+console.error(result.error);
 
 box.textContent =
 "No bank account is currently available.";
@@ -1202,26 +2011,34 @@ return;
 
 }
 
+if(!result.data?.length){
+
+box.textContent =
+"No bank account is currently available.";
+
+return;
+
+}
 
 box.innerHTML = "";
 
-
-data.forEach(account=>{
+result.data.forEach(
+function(account){
 
 const div =
-document.createElement("div");
+document.createElement(
+"div"
+);
 
-div.style =
-"border:1px solid #ddd;" +
-"border-radius:10px;" +
-"padding:12px;" +
-"margin-bottom:10px;";
+div.className =
+"notice";
 
 div.innerHTML = `
 
 <strong>
 ${esc(
-account.bank_name || ""
+account.bank_name ||
+""
 )}
 </strong>
 
@@ -1229,7 +2046,8 @@ account.bank_name || ""
 
 Account Name:
 ${esc(
-account.account_name || ""
+account.account_name ||
+""
 )}
 
 <br>
@@ -1237,7 +2055,8 @@ account.account_name || ""
 Account Number:
 <strong>
 ${esc(
-account.account_number || ""
+account.account_number ||
+""
 )}
 </strong>
 
@@ -1245,10 +2064,12 @@ account.account_number || ""
 
 box.appendChild(div);
 
-});
+}
+);
 
+}
 
-}catch(error){
+catch(error){
 
 console.error(error);
 
@@ -1260,26 +2081,34 @@ box.textContent =
 }
 
 
+/* =========================================
+   CUSTOMER AUTH
+   ========================================= */
+
 async function checkCustomer(){
 
 try{
 
-const {data} =
+const result =
 await supabaseClient
 .auth
 .getSession();
 
-if(data &&
-data.session){
+if(
+result.data &&
+result.data.session
+){
 
 currentUser =
-data.session.user;
+result.data.session.user;
 
 await loadCustomerProfile();
 
 }
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
@@ -1287,6 +2116,10 @@ console.error(error);
 
 }
 
+
+/* =========================================
+   LOGIN
+   ========================================= */
 
 async function customerLogin(){
 
@@ -1300,7 +2133,6 @@ document.getElementById(
 "loginPassword"
 ).value;
 
-
 if(!email || !password){
 
 alert(
@@ -1311,34 +2143,37 @@ return;
 
 }
 
-
-const {data,error} =
+const result =
 await supabaseClient
 .auth
 .signInWithPassword({
 
-email:email,
+email:
+email,
 
-password:password
+password:
+password
 
 });
 
+if(result.error){
 
-if(error){
-
-alert(error.message);
+alert(
+result.error.message
+);
 
 return;
 
 }
 
-
 currentUser =
-data.user;
+result.data.user;
 
 await loadCustomerProfile();
 
-closeModal("loginModal");
+closeModal(
+"loginModal"
+);
 
 alert(
 "Login successful."
@@ -1346,6 +2181,10 @@ alert(
 
 }
 
+
+/* =========================================
+   REGISTER
+   ========================================= */
 
 async function customerRegister(){
 
@@ -1369,7 +2208,6 @@ document.getElementById(
 "registerPassword"
 ).value;
 
-
 if(
 !name ||
 !email ||
@@ -1385,62 +2223,82 @@ return;
 
 }
 
-
-const {data,error} =
+const result =
 await supabaseClient
 .auth
 .signUp({
 
-email:email,
+email:
+email,
 
-password:password,
+password:
+password,
 
 options:{
 data:{
-full_name:name,
-phone:phone
+full_name:
+name,
+
+phone:
+phone
 }
 }
 
 });
 
+if(result.error){
 
-if(error){
-
-alert(error.message);
+alert(
+result.error.message
+);
 
 return;
 
 }
 
-
-if(data.user){
+if(result.data.user){
 
 currentUser =
-data.user;
+result.data.user;
 
+const profile =
 await supabaseClient
 .from("profiles")
 .upsert({
 
-id:data.user.id,
+id:
+result.data.user.id,
 
-full_name:name,
+full_name:
+name,
 
-email:email,
+email:
+email,
 
-phone:phone,
+phone:
+phone,
 
-role:"customer",
+role:
+"customer",
 
-status:"active"
+status:
+"active"
 
 });
 
+if(profile.error){
+
+console.error(
+profile.error
+);
+
 }
 
+}
 
-closeModal("registerModal");
+closeModal(
+"registerModal"
+);
 
 alert(
 "Account created successfully."
@@ -1449,64 +2307,94 @@ alert(
 }
 
 
+/* =========================================
+   CUSTOMER PROFILE
+   ========================================= */
+
 async function loadCustomerProfile(){
 
 if(!currentUser) return;
 
-
-const {data} =
+const result =
 await supabaseClient
 .from("profiles")
 .select("*")
-.eq("id",currentUser.id)
+.eq(
+"id",
+currentUser.id
+)
 .maybeSingle();
 
-
-customerProfile = data;
+customerProfile =
+result.data ||
+null;
 
 }
 
+
+/* =========================================
+   ACCOUNT BUTTON
+   ========================================= */
 
 function openProfile(){
 
 if(!currentUser){
 
-openModal("loginModal");
+openModal(
+"loginModal"
+);
 
 return;
 
 }
-
 
 if(customerProfile){
 
 document.getElementById(
 "profileName"
 ).value =
-customerProfile.full_name || "";
+customerProfile.full_name ||
+"";
 
 document.getElementById(
 "profileEmail"
 ).value =
-customerProfile.email || "";
+customerProfile.email ||
+currentUser.email ||
+"";
 
 document.getElementById(
 "profilePhone"
 ).value =
-customerProfile.phone || "";
+customerProfile.phone ||
+"";
+
+}
+
+else{
+
+document.getElementById(
+"profileEmail"
+).value =
+currentUser.email ||
+"";
+
+}
+
+openModal(
+"profileModal"
+);
 
 }
 
 
-openModal("profileModal");
-
-}
-
+/* =========================================
+   SAVE PROFILE
+   ========================================= */
 
 async function saveProfile(){
 
 if(!currentUser) return;
-
 
 const name =
 document.getElementById(
@@ -1523,14 +2411,9 @@ document.getElementById(
 "profilePicture"
 ).files[0];
 
-
 let pictureUrl =
-customerProfile
-?
-customerProfile.profile_picture_url
-:
+customerProfile?.profile_picture_url ||
 null;
-
 
 if(file){
 
@@ -1546,7 +2429,6 @@ currentUser.id +
 "." +
 extension;
 
-
 const upload =
 await supabaseClient
 .storage
@@ -1554,9 +2436,10 @@ await supabaseClient
 .upload(
 path,
 file,
-{upsert:true}
+{
+upsert:true
+}
 );
-
 
 if(upload.error){
 
@@ -1568,26 +2451,28 @@ return;
 
 }
 
-
 pictureUrl =
 supabaseClient
 .storage
 .from("images")
-.getPublicUrl(path)
+.getPublicUrl(
+path
+)
 .data
 .publicUrl;
 
 }
 
-
-const {error} =
+const result =
 await supabaseClient
 .from("profiles")
 .update({
 
-full_name:name,
+full_name:
+name,
 
-phone:phone,
+phone:
+phone,
 
 profile_picture_url:
 pictureUrl,
@@ -1596,21 +2481,26 @@ updated_at:
 new Date().toISOString()
 
 })
-.eq("id",currentUser.id);
+.eq(
+"id",
+currentUser.id
+);
 
+if(result.error){
 
-if(error){
-
-alert(error.message);
+alert(
+result.error.message
+);
 
 return;
 
 }
 
-
 await loadCustomerProfile();
 
-closeModal("profileModal");
+closeModal(
+"profileModal"
+);
 
 alert(
 "Profile updated successfully."
@@ -1619,33 +2509,42 @@ alert(
 }
 
 
+/* =========================================
+   LOGOUT
+   ========================================= */
+
 async function logoutCustomer(){
 
 await supabaseClient
 .auth
 .signOut();
 
-currentUser = null;
+currentUser =
+null;
 
-customerProfile = null;
+customerProfile =
+null;
 
 location.reload();
 
 }
 
 
+/* =========================================
+   LOCATION
+   ========================================= */
+
 function getCustomerLocation(){
 
 if(!navigator.geolocation){
 
 alert(
-"Location is not supported."
+"Location is not supported on this device."
 );
 
 return;
 
 }
-
 
 navigator.geolocation.getCurrentPosition(
 
@@ -1676,8 +2575,11 @@ alert(
 },
 
 {
+
 enableHighAccuracy:true,
+
 timeout:10000
+
 }
 
 );
@@ -1685,12 +2587,16 @@ timeout:10000
 }
 
 
+/* =========================================
+   PLACE ORDER
+   ========================================= */
+
 async function placeOrder(){
 
 if(!currentUser){
 
 alert(
-  "Please login first."
+"Please login first."
 );
 
 return;
@@ -1719,39 +2625,7 @@ if(
 ){
 
 alert(
-"Please enter address, " +
-"select payment method " +
-"and upload payment receipt."
-);
-
-return;
-
-  }
-  const address =
-document.getElementById(
-"deliveryAddress"
-).value.trim();
-
-const method =
-document.getElementById(
-"paymentMethod"
-).value;
-
-const file =
-document.getElementById(
-"receiptFile"
-).files[0];
-
-if(
-!address ||
-!method ||
-!file
-){
-
-alert(
-"Please enter address, " +
-"select payment method " +
-"and upload payment receipt."
+"Please enter address, select payment method and upload payment receipt."
 );
 
 return;
@@ -1765,14 +2639,21 @@ parseFloat(
 document.getElementById(
 "deliveryCharge"
 ).value
-.replace("RM","")
+.replace(
+"RM",
+""
+)
 .trim()
 ) || 0;
 
 const total =
-subtotal() + delivery;
+subtotal() +
+delivery;
 
-const {data:order,error} =
+
+/* CREATE ORDER */
+
+const orderResult =
 await supabaseClient
 .from("orders")
 .insert({
@@ -1831,7 +2712,17 @@ order_status:
 .select()
 .single();
 
-if(error) throw error;
+if(orderResult.error){
+
+throw orderResult.error;
+
+}
+
+const order =
+orderResult.data;
+
+
+/* RECEIPT */
 
 const extension =
 file.name
@@ -1844,37 +2735,66 @@ const path =
 order.id +
 "." +
 extension;
-  const upload =
+
+const upload =
 await supabaseClient
 .storage
 .from("images")
 .upload(
 path,
 file,
-{upsert:true}
+{
+upsert:true
+}
 );
 
-if(upload.error)
+if(upload.error){
+
 throw upload.error;
+
+}
 
 const receiptUrl =
 supabaseClient
 .storage
 .from("images")
-.getPublicUrl(path)
+.getPublicUrl(
+path
+)
 .data
 .publicUrl;
 
+
+/* SAVE RECEIPT URL */
+
+const receiptUpdate =
 await supabaseClient
 .from("orders")
 .update({
+
 payment_receipt_url:
 receiptUrl
+
 })
-.eq("id",order.id);
+.eq(
+"id",
+order.id
+);
+
+if(receiptUpdate.error){
+
+throw receiptUpdate.error;
+
+}
+
+
+/* ORDER ITEMS */
 
 const items =
-cart.map(item=>({
+cart.map(
+function(item){
+
+return {
 
 order_id:
 order.id,
@@ -1901,20 +2821,33 @@ subtotal:
 Number(item.price) *
 Number(item.quantity)
 
-}));
-  const itemResult =
+};
+
+}
+);
+
+const itemResult =
 await supabaseClient
 .from("order_items")
 .insert(items);
 
-if(itemResult.error)
+if(itemResult.error){
+
 throw itemResult.error;
+
+}
+
+
+/* CLEAR CART */
 
 cart = [];
 
 saveCart();
 
 updateCartCount();
+
+
+/* SUCCESS */
 
 document.getElementById(
 "successOrderId"
@@ -1930,7 +2863,9 @@ openModal(
 "successModal"
 );
 
-}catch(error){
+}
+
+catch(error){
 
 console.error(error);
 
@@ -1941,36 +2876,65 @@ error.message
 
 }
 
-  }
-  function openModal(id){
+}
 
-document
-.getElementById(id)
-.classList
-.add("show");
+
+/* =========================================
+   MODALS
+   ========================================= */
+
+function openModal(id){
+
+const element =
+document.getElementById(id);
+
+if(element){
+
+element.classList.add(
+"show"
+);
+
+}
 
 }
 
 function closeModal(id){
 
-document
-.getElementById(id)
-.classList
-.remove("show");
+const element =
+document.getElementById(id);
+
+if(element){
+
+element.classList.remove(
+"show"
+);
+
+}
 
 }
 
 function showRegister(){
 
-closeModal("loginModal");
+closeModal(
+"loginModal"
+);
 
-openModal("registerModal");
+openModal(
+"registerModal"
+);
 
 }
 
+
+/* =========================================
+   MONEY
+   ========================================= */
+
 function money(value){
 
-return Number(value || 0)
+return Number(
+value || 0
+)
 .toLocaleString(
 "en-MY",
 {
@@ -1981,20 +2945,56 @@ maximumFractionDigits:2
 
 }
 
+
+/* =========================================
+   HTML ESCAPE
+   ========================================= */
+
 function esc(value){
 
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+return String(
+value ?? ""
+)
 
-  }
-  supabaseClient
+.replace(
+/&/g,
+"&amp;"
+)
+
+.replace(
+/</g,
+"&lt;"
+)
+
+.replace(
+/>/g,
+"&gt;"
+)
+
+.replace(
+/"/g,
+"&quot;"
+)
+
+.replace(
+/'/g,
+"&#039;"
+);
+
+}
+
+
+/* =========================================
+   SUPABASE AUTH LISTENER
+   ========================================= */
+
+supabaseClient
 .auth
 .onAuthStateChange(
-async function(event,session){
+async function(
+event,
+session
+){
 
 if(session){
 
@@ -2003,26 +3003,41 @@ session.user;
 
 await loadCustomerProfile();
 
-}else{
+}
 
-currentUser = null;
+else{
 
-customerProfile = null;
+currentUser =
+null;
+
+customerProfile =
+null;
 
 }
 
-});
+}
+);
 
+
+/* =========================================
+   CLOSE MODAL WHEN CLICKING OUTSIDE
+   ========================================= */
 
 document
-.querySelectorAll(".modal")
-.forEach(function(modal){
+.querySelectorAll(
+".modal"
+)
+.forEach(
+function(modal){
 
 modal.addEventListener(
 "click",
 function(event){
 
-if(event.target === modal){
+if(
+event.target ===
+modal
+){
 
 modal.classList.remove(
 "show"
@@ -2030,9 +3045,13 @@ modal.classList.remove(
 
 }
 
-});
+}
+);
 
-});
-  </script>
+}
+);
+
+</script>
+
 </body>
 </html>
