@@ -1,317 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<meta name="theme-color" content="#126b3a">
-<title>Admin Panel - Pasarraya Hameeds</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FreshMart Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.3/papaparse.min.js"></script>
 <style>
-*{box-sizing:border-box}html,body{margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background:#f3f6f4;color:#17201b}
-button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
-#loginPage{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#126b3a,#0b4d2a)}
-.login-box{width:100%;max-width:420px;background:#fff;border-radius:18px;padding:28px;box-shadow:0 15px 50px #0005}
-.login-logo{width:85px;height:85px;display:block;margin:0 auto 15px;object-fit:cover;border-radius:50%;background:#eee}
-.login-box h1{text-align:center;margin:5px 0;font-size:25px}.login-box p{text-align:center;color:#68746d}
-.form-group{margin-bottom:14px}.form-group label{display:block;font-weight:bold;margin-bottom:6px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px;border:1px solid #ccd5cf;border-radius:8px;outline:none}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:#126b3a}
-.primary{border:0;border-radius:9px;padding:11px 15px;background:#126b3a;color:#fff;font-weight:bold}.secondary{border:0;border-radius:9px;padding:11px 15px;background:#e9efeb;color:#126b3a;font-weight:bold}.danger{background:#c62828!important;color:#fff!important}
-#app{min-height:100vh}.topbar{position:sticky;top:0;z-index:100;height:64px;background:#126b3a;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 18px;box-shadow:0 2px 10px #0003}
-.brand{display:flex;align-items:center;gap:10px}.brand img{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#fff}.brand strong{display:block;font-size:17px}.brand small{opacity:.85}
-.top-actions{display:flex;align-items:center;gap:8px}.top-btn{border:0;border-radius:8px;padding:9px 12px;background:#fff;color:#126b3a;font-weight:bold}
-.layout{display:flex;min-height:calc(100vh - 64px)}.sidebar{width:245px;background:#fff;border-right:1px solid #dce3df;padding:15px 10px;flex-shrink:0}
-.nav-btn{width:100%;border:0;background:transparent;padding:12px;border-radius:8px;text-align:left;margin-bottom:5px;font-weight:bold;color:#39453e}.nav-btn:hover,.nav-btn.active{background:#e8f2ec;color:#126b3a}
-.content{flex:1;padding:20px;min-width:0}.page{display:none}.page.active{display:block}
-.page-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}.page-title h2{margin:0}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.stat{background:#fff;border-radius:12px;padding:18px;box-shadow:0 2px 10px #0001}.stat small{color:#68746d}.stat strong{display:block;font-size:25px;margin-top:5px;color:#126b3a}
-.table-wrap{background:#fff;border-radius:12px;overflow:auto;box-shadow:0 2px 10px #0001}table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:12px;border-bottom:1px solid #edf0ee;text-align:left}th{background:#f3f6f4}
-.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold}.badge.active{background:#dff3e4;color:#17652f}.badge.inactive{background:#ffebee;color:#b71c1c}
-.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:15px}.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 10px #0001}
-.actions{display:flex;gap:7px;flex-wrap:wrap}.actions button{border:0;border-radius:7px;padding:8px 10px;font-weight:bold}
-.search{width:100%;max-width:350px;padding:11px;border:1px solid #ccd5cf;border-radius:8px}
-.modal{position:fixed;inset:0;background:#0008;z-index:1000;display:none;align-items:center;justify-content:center;padding:15px}.modal.show{display:flex}.modal-box{width:100%;max-width:650px;max-height:90vh;overflow:auto;background:#fff;border-radius:15px;padding:20px}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{border:0;width:35px;height:35px;border-radius:50%;background:#eee;font-size:20px}
-.variant-row{display:grid;grid-template-columns:1fr 130px 45px;gap:7px;margin-bottom:7px}.variant-row input{padding:9px;border:1px solid #ccd5cf;border-radius:7px}
-.account-card{border:1px solid #e0e6e2;border-radius:10px;padding:12px;margin-bottom:10px;background:#fafcfb}
-@media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr)}.sidebar{width:190px}}
-@media(max-width:650px){.topbar{height:58px;padding:0 10px}.brand strong{font-size:14px}.brand small{display:none}.brand img{width:36px;height:36px}.top-btn{padding:8px;font-size:12px}.layout{display:block}.sidebar{width:100%;display:flex;overflow-x:auto;padding:7px;border-right:0;border-bottom:1px solid #ddd}.nav-btn{width:auto;white-space:nowrap;margin:0 4px 0 0;padding:9px 12px}.content{padding:12px}.stats{grid-template-columns:repeat(2,1fr);gap:9px}.stat{padding:13px}.stat strong{font-size:20px}.page-title h2{font-size:20px}.variant-row{grid-template-columns:1fr 100px 40px}}
-</style>
-</head>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}header{height:64px;background:#fff;border-bottom:1px solid #ddd;display:flex;align-items:center;justify-content:space-between;padding:0 18px;position:sticky;top:0;z-index:5}.logo{font-size:21px;font-weight:800}.logo span{color:#16a34a}.layout{display:flex;min-height:calc(100vh - 64px)}aside{width:225px;background:#111827;color:#fff;padding:12px}nav button{width:100%;border:0;background:transparent;color:#d1d5db;text-align:left;padding:12px;border-radius:8px;margin:2px 0;cursor:pointer}nav button.active,nav button:hover{background:#1f2937;color:#fff}main{padding:20px;width:100%;overflow:auto}.page{display:none}.page.active{display:block}h1{margin:0 0 5px}.sub{color:#667085;margin-bottom:18px}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.card,.panel{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:17px}.num{font-size:28px;font-weight:800;margin-top:8px}.panel{margin-top:16px}.toolbar{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px}input,select,textarea{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:8px;font:inherit}.field{flex:1;min-width:180px}.btn{border:0;border-radius:8px;padding:10px 14px;background:#16a34a;color:white;font-weight:700;cursor:pointer}.btn.dark{background:#374151}.btn.light{background:#e9eef5;color:#172033}.btn.red{background:#dc2626}table{width:100%;border-collapse:collapse}th,td{padding:10px 8px;border-bottom:1px solid #eee;text-align:left;font-size:13px}th{background:#f8fafc}.modal{display:none;position:fixed;inset:0;background:#0008;z-index:20;align-items:center;justify-content:center;padding:15px}.modal.open{display:flex}.box{background:#fff;border-radius:14px;padding:20px;width:min(680px,100%);max-height:90vh;overflow:auto}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.status{padding:10px;border-radius:8px;margin:10px 0;display:none}.ok{display:block;background:#dcfce7;color:#166534}.err{display:block;background:#fee2e2;color:#991b1b}@media(max-width:700px){aside{width:64px;padding:7px}nav button{font-size:0;text-align:center}nav button:after{content:'•';font-size:23px}.cards{grid-template-columns:1fr 1fr}main{padding:12px}.grid{grid-template-columns:1fr}}
+</style></head>
 <body>
-
-<section id="loginPage">
-<div class="login-box">
-<img id="loginLogo" class="login-logo" src="images/logo.png" alt="Logo" onerror="this.style.display='none'">
-<h1>Admin Panel</h1><p>Pasarraya Hameeds</p>
-<div id="loginError" class="hidden" style="background:#ffebee;color:#b71c1c;padding:10px;border-radius:8px;margin-bottom:12px"></div>
-<div class="form-group"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="Admin email"></div>
-<div class="form-group"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
-<button class="primary" style="width:100%" onclick="adminLogin()">Login</button>
-</div>
-</section>
-
-<section id="app" class="hidden">
-<header class="topbar">
-<div class="brand"><img id="shopLogo" src="images/logo.png" alt="Logo" onerror="this.style.display='none'"><div><strong id="shopName">Pasarraya Hameeds</strong><small>Admin Panel</small></div></div>
-<div class="top-actions"><span id="userRole">Admin</span><button class="top-btn" onclick="logout()">Logout</button></div>
-</header>
-
-<div class="layout">
-<aside class="sidebar">
-<button class="nav-btn active" onclick="showPage('dashboard',this)">Dashboard</button>
-<button class="nav-btn" onclick="showPage('staff',this)">Staff</button>
-<button class="nav-btn" onclick="showPage('products',this)">Products</button>
-<button class="nav-btn" onclick="showPage('accounts',this)">Bank Accounts</button>
-<button class="nav-btn" onclick="showPage('orders',this)">Orders</button>
-<button class="nav-btn" onclick="showPage('settings',this)">Settings</button>
-</aside>
-
-<main class="content">
-
-<section id="page-dashboard" class="page active">
-<div class="page-title"><h2>Dashboard</h2><button class="primary" onclick="loadDashboard()">Refresh</button></div>
-<div class="stats">
-<div class="stat"><small>Today's Orders</small><strong id="todayOrders">0</strong></div>
-<div class="stat"><small>Today's Sales</small><strong id="todaySales">RM 0.00</strong></div>
-<div class="stat"><small>Staff</small><strong id="staffCount">0</strong></div>
-<div class="stat"><small>Products</small><strong id="productCount">0</strong></div>
-</div>
-<div class="table-wrap"><table><thead><tr><th>Order</th><th>Total</th><th>Status</th><th>Date</th></tr></thead><tbody id="dashboardOrders"></tbody></table></div>
-</section>
-
-<section id="page-staff" class="page">
-<div class="page-title"><h2>Staff Management</h2><button class="primary" onclick="openStaffModal()">Add Staff Profile</button></div>
-<input class="search" id="staffSearch" placeholder="Search staff..." oninput="renderStaff()">
-<br><br><div class="table-wrap"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Action</th></tr></thead><tbody id="staffTable"></tbody></table></div>
-</section>
-
-<section id="page-products" class="page">
-<div class="page-title"><h2>Products</h2><button class="primary" onclick="openProductModal()">Add Product</button></div>
-<div class="table-wrap"><table><thead><tr><th>Product</th><th>Description</th><th>Price</th><th>Variant</th><th>Status</th><th>Action</th></tr></thead><tbody id="productTable"></tbody></table></div>
-</section>
-
-<section id="page-accounts" class="page">
-<div class="page-title"><h2>Bank Accounts</h2><button class="primary" onclick="openAccountModal()">Add Account</button></div>
-<p>Customers will see active bank accounts during payment.</p>
-<div id="accountList"></div>
-</section>
-
-<section id="page-orders" class="page">
-<div class="page-title"><h2>Orders</h2><button class="primary" onclick="loadOrders()">Refresh</button></div>
-<div class="table-wrap"><table><thead><tr><th>Order</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="orderTable"></tbody></table></div>
-</section>
-
-<section id="page-settings" class="page">
-<div class="page-title"><h2>Settings</h2></div>
-<div class="card">
-<h3>Shop Information</h3>
-<div class="form-group"><label>Shop Name</label><input id="settingShopName" placeholder="Shop name"></div>
-<div class="form-group"><label>Logo URL</label><input id="settingLogoUrl" placeholder="https://..."></div>
-<button class="primary" onclick="saveSettings()">Save Settings</button>
-</div>
-<br>
-<div class="card">
-<h3>Payment QR</h3>
-<p>Your QR image can remain in the project image folder, while the active bank account information is managed from the Bank Accounts section.</p>
-<div class="form-group"><label>QR Image URL</label><input id="settingQrUrl" placeholder="https://..."></div>
-<button class="primary" onclick="saveQr()">Save QR</button>
-</div>
-</section>
-
-</main>
-</div>
-</section>
-
-<div id="staffModal" class="modal"><div class="modal-box">
-<div class="modal-head"><h2 id="staffModalTitle">Add Staff</h2><button class="close" onclick="closeModal('staffModal')">×</button></div>
-<input type="hidden" id="staffId">
-<div class="form-group"><label>Full Name</label><input id="staffName"></div>
-<div class="form-group"><label>Email</label><input id="staffEmail" type="email"></div>
-<div class="form-group"><label>Phone</label><input id="staffPhone"></div>
-<div class="form-group"><label>Role</label><select id="staffRole"><option value="admin">Admin</option><option value="manager">Manager</option><option value="cashier">Cashier</option><option value="waiter">Waiter</option><option value="cook">Cook</option></select></div>
-<div class="form-group"><label>Status</label><select id="staffStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
-<button class="primary" onclick="saveStaff()">Save Profile</button>
-</div></div>
-
-<div id="productModal" class="modal"><div class="modal-box">
-<div class="modal-head"><h2 id="productModalTitle">Add Product</h2><button class="close" onclick="closeModal('productModal')">×</button></div>
-<input type="hidden" id="productId">
-<div class="form-group"><label>Product Name</label><input id="productName"></div>
-<div class="form-group"><label>Description</label><textarea id="productDescription" rows="3"></textarea></div>
-<div class="form-group"><label>Base Price (RM)</label><input id="productPrice" type="number" step="0.01" min="0"></div>
-<div class="form-group"><label>Status</label><select id="productStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
-<label><strong>Variants</strong></label>
-<div id="variantList"></div><button class="secondary" style="margin:8px 0" onclick="addVariantRow()">+ Add Variant</button>
-<br><button class="primary" onclick="saveProduct()">Save Product</button>
-</div></div>
-
-<div id="accountModal" class="modal"><div class="modal-box">
-<div class="modal-head"><h2>Bank Account</h2><button class="close" onclick="closeModal('accountModal')">×</button></div>
-<input type="hidden" id="accountId">
-<div class="form-group"><label>Bank Name</label><input id="bankName"></div>
-<div class="form-group"><label>Account Holder Name</label><input id="accountHolder"></div>
-<div class="form-group"><label>Account Number</label><input id="accountNumber"></div>
-<div class="form-group"><label>Status</label><select id="accountStatus"><option value="active">Active</option><option value="inactive">Inactive</option></select></div>
-<button class="primary" onclick="saveAccount()">Save Account</button>
-</div></div>
-
+<header><div class="logo">Fresh<span>Mart</span> Admin</div><div id="loginInfo">Admin</div></header>
+<div class="layout"><aside><nav>
+<button class="active" data-p="dashboard">Dashboard</button><button data-p="products">Products</button><button data-p="categories">Categories</button><button data-p="orders">Orders</button><button data-p="customers">Customers</button><button data-p="staff">Staff</button><button data-p="payments">Payments</button><button data-p="settings">Settings</button><button id="logout">Logout</button>
+</nav></aside><main>
+<section id="dashboard" class="page active"><h1>Dashboard</h1><div class="sub">FreshMart online shopping portal</div><div class="cards"><div class="card">Products<div class="num" id="nProducts">—</div></div><div class="card">Categories<div class="num" id="nCategories">—</div></div><div class="card">Customers<div class="num" id="nCustomers">—</div></div><div class="card">Orders<div class="num" id="nOrders">—</div></div></div><div class="panel"><button class="btn" onclick="show('products');openProduct()">+ Add Product</button> <button class="btn dark" onclick="show('products')">Manage Products / CSV</button></div></section>
+<section id="products" class="page"><h1>Products</h1><div class="sub">Add, edit, delete and import FreshMart products.</div><div class="panel"><div class="toolbar"><input id="search" class="field" placeholder="Search products" oninput="renderProducts()"><button class="btn" onclick="openProduct()">+ Add Product</button><label class="btn dark">Import CSV<input id="csv" type="file" accept=".csv" hidden></label><button class="btn light" onclick="template()">CSV Template</button></div><div id="pmsg" class="status"></div><div style="overflow:auto"><table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Available</th><th>Variants</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div></div></section>
+<section id="categories" class="page"><h1>Categories</h1><div class="panel"><button class="btn" onclick="openCategory()">+ Add Category</button><div style="overflow:auto;margin-top:14px"><table><thead><tr><th>Name</th><th>Description</th><th>Active</th><th></th></tr></thead><tbody id="categoryRows"></tbody></table></div></div></section>
+<section id="orders" class="page"><h1>Orders</h1><div class="panel"><button class="btn light" onclick="loadOrders()">Refresh</button><div style="overflow:auto;margin-top:12px"><table><thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th></tr></thead><tbody id="orderRows"></tbody></table></div></div></section>
+<section id="customers" class="page"><h1>Customers</h1><div class="panel"><div style="overflow:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th>Joined</th></tr></thead><tbody id="customerRows"></tbody></table></div></div></section>
+<section id="staff" class="page"><h1>Staff</h1><div class="panel"><div style="overflow:auto"><table><thead><tr><th>Name</th><th>Email</th><th>Username</th><th>Role</th><th>Status</th></tr></thead><tbody id="staffRows"></tbody></table></div></div></section>
+<section id="payments" class="page"><h1>Payments</h1><div class="panel"><div style="overflow:auto"><table><thead><tr><th>Order</th><th>Method</th><th>Amount</th><th>Status</th><th>Paid At</th></tr></thead><tbody id="paymentRows"></tbody></table></div></div></section>
+<section id="settings" class="page"><h1>Settings</h1><div class="panel">Supabase connection: <b id="connection">Not tested</b><br><br><button class="btn" onclick="testConnection()">Test Connection</button></div></section>
+</main></div>
+<div class="modal" id="productModal"><div class="box"><h2 id="ptitle">Add Product</h2><div id="pformmsg" class="status"></div><div class="grid"><div><label>Name</label><input id="name"></div><div><label>Category</label><select id="category"></select></div><div><label>Price</label><input id="price" type="number" step="0.01"></div><div><label>Stock</label><input id="stock" type="number" step="0.01" value="0"></div><div><label>Unit</label><input id="unit" value="pcs"></div><div><label>Image URL</label><input id="image"></div></div><label>Description</label><textarea id="description" rows="3"></textarea><p><label><input id="available" type="checkbox" checked style="width:auto"> Available</label> <label><input id="featured" type="checkbox" style="width:auto"> Featured</label></p><button class="btn" onclick="saveProduct()">Save Product</button> <button class="btn light" onclick="closeM('productModal')">Cancel</button></div></div>
+<div class="modal" id="categoryModal"><div class="box"><h2>Add Category</h2><div id="cmsg" class="status"></div><label>Name</label><input id="catName"><label>Description</label><textarea id="catDesc" rows="3"></textarea><p><label><input id="catActive" type="checkbox" checked style="width:auto"> Active</label></p><button class="btn" onclick="saveCategory()">Save</button> <button class="btn light" onclick="closeM('categoryModal')">Cancel</button></div></div>
 <script>
-const SUPABASE_URL="https://lbcekixommklkkptmfdx.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiY2VraXhvbW1rbGtrcHRtZmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MjQyOTksImV4cCI6MjEwMjMwMDI5OX0.dhiffI_-ufqSE77duUxJ-0FewVpe1uA6oVkQF05H5rM";
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-let currentUser=null,profile=null,staff=[],products=[],accounts=[];
-
-document.addEventListener("DOMContentLoaded",checkSession);
-
-async function checkSession(){
- const r=await db.auth.getSession();
- if(r.data.session){currentUser=r.data.session.user;if(await loadProfile())showApp();}
-}
-async function adminLogin(){
- const email=document.getElementById("loginEmail").value.trim(),password=document.getElementById("loginPassword").value;
- hideError();
- if(!email||!password)return showError("Please enter email and password.");
- const r=await db.auth.signInWithPassword({email,password});
- if(r.error)return showError(r.error.message);
- currentUser=r.data.user;
- if(!await loadProfile()){await db.auth.signOut();return;}
- showApp();
-}
-async function loadProfile(){
- const r=await db.from("profiles").select("*").eq("id",currentUser.id).maybeSingle();
- if(r.error||!r.data)return showError("Admin profile not found.");
- profile=r.data;
- const role=String(profile.role||"").toLowerCase();
- if(!["admin","manager"].includes(role)){showError("Only Admin or Manager can access this panel.");return false;}
- if(String(profile.status||"active").toLowerCase()!=="active"){showError("This account is inactive.");return false;}
- return true;
-}
-function showApp(){
- document.getElementById("loginPage").classList.add("hidden");
- document.getElementById("app").classList.remove("hidden");
- document.getElementById("userRole").textContent=profile.role;
- loadSettings();loadDashboard();loadStaff();loadProducts();loadAccounts();loadOrders();
-}
-function showPage(name,btn){
- document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
- document.getElementById("page-"+name).classList.add("active");
- document.querySelectorAll(".nav-btn").forEach(x=>x.classList.remove("active"));
- btn.classList.add("active");
- if(name==="staff")loadStaff();
- if(name==="products")loadProducts();
- if(name==="accounts")loadAccounts();
- if(name==="orders")loadOrders();
-}
-async function loadDashboard(){
- const today=new Date().toISOString().slice(0,10);
- const r=await db.from("orders").select("id,total,order_status,created_at").gte("created_at",today+"T00:00:00").order("created_at",{ascending:false}).limit(100);
- const rows=r.data||[];
- document.getElementById("todayOrders").textContent=rows.length;
- document.getElementById("todaySales").textContent="RM "+money(rows.reduce((s,x)=>s+Number(x.total||0),0));
- document.getElementById("dashboardOrders").innerHTML=rows.slice(0,10).map(x=>`<tr><td>${esc(x.id)}</td><td>RM ${money(x.total)}</td><td>${esc(x.order_status||"pending")}</td><td>${new Date(x.created_at).toLocaleString()}</td></tr>`).join("");
- const s=await db.from("profiles").select("id",{count:"exact",head:true});document.getElementById("staffCount").textContent=s.count||0;
- const p=await db.from("products").select("id",{count:"exact",head:true});document.getElementById("productCount").textContent=p.count||0;
-}
-async function loadStaff(){
- const r=await db.from("profiles").select("*").order("created_at",{ascending:false});staff=r.data||[];renderStaff();
-}
-function renderStaff(){
- const q=(document.getElementById("staffSearch")?.value||"").toLowerCase();
- const rows=staff.filter(x=>(x.full_name+" "+(x.email||"")+" "+(x.phone||"")+" "+x.role).toLowerCase().includes(q));
- document.getElementById("staffTable").innerHTML=rows.map(x=>`<tr><td>${esc(x.full_name)}</td><td>${esc(x.email||"")}</td><td>${esc(x.phone||"")}</td><td>${esc(x.role)}</td><td><span class="badge ${x.status==="active"?"active":"inactive"}">${esc(x.status)}</span></td><td><div class="actions"><button onclick="editStaff('${x.id}')">Edit</button><button class="danger" onclick="toggleStaff('${x.id}','${x.status}')">${x.status==="active"?"Disable":"Enable"}</button></div></td></tr>`).join("");
-}
-function openStaffModal(){
- ["staffId","staffName","staffEmail","staffPhone"].forEach(id=>document.getElementById(id).value="");
- document.getElementById("staffRole").value="cashier";document.getElementById("staffStatus").value="active";document.getElementById("staffModalTitle").textContent="Add Staff";openModal("staffModal");
-}
-function editStaff(id){
- const x=staff.find(a=>String(a.id)===String(id));if(!x)return;
- document.getElementById("staffId").value=x.id;document.getElementById("staffName").value=x.full_name||"";document.getElementById("staffEmail").value=x.email||"";document.getElementById("staffPhone").value=x.phone||"";document.getElementById("staffRole").value=x.role||"cashier";document.getElementById("staffStatus").value=x.status||"active";document.getElementById("staffModalTitle").textContent="Edit Staff";openModal("staffModal");
-}
-async function saveStaff(){
- const id=document.getElementById("staffId").value;
- const data={full_name:document.getElementById("staffName").value.trim(),email:document.getElementById("staffEmail").value.trim()||null,phone:document.getElementById("staffPhone").value.trim()||null,role:document.getElementById("staffRole").value,status:document.getElementById("staffStatus").value,updated_at:new Date().toISOString()};
- if(!data.full_name)return alert("Full name is required.");
- let r=id?await db.from("profiles").update(data).eq("id",id):await db.from("profiles").insert(data);
- if(r.error)return alert(r.error.message);
- closeModal("staffModal");loadStaff();loadDashboard();
-}
-async function toggleStaff(id,status){
- const r=await db.from("profiles").update({status:status==="active"?"inactive":"active",updated_at:new Date().toISOString()}).eq("id",id);
- if(r.error)return alert(r.error.message);loadStaff();
-}
-async function loadProducts(){
- const r=await db.from("products").select("*").order("name");products=r.data||[];
- document.getElementById("productTable").innerHTML=products.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.description||"")}</td><td>RM ${money(x.price)}</td><td>${esc(x.variant||"")}</td><td>${esc(x.status||"active")}</td><td><button onclick="editProduct('${x.id}')">Edit</button></td></tr>`).join("");
-}
-function openProductModal(){
- document.getElementById("productId").value="";document.getElementById("productName").value="";document.getElementById("productDescription").value="";document.getElementById("productPrice").value="";document.getElementById("productStatus").value="active";document.getElementById("variantList").innerHTML="";addVariantRow();openModal("productModal");
-}
-function editProduct(id){
- const x=products.find(a=>String(a.id)===String(id));if(!x)return;
- document.getElementById("productId").value=x.id;document.getElementById("productName").value=x.name||"";document.getElementById("productDescription").value=x.description||"";document.getElementById("productPrice").value=x.price||0;document.getElementById("productStatus").value=x.status||"active";document.getElementById("variantList").innerHTML="";
- if(x.variants){try{const v=typeof x.variants==="string"?JSON.parse(x.variants):x.variants;(Array.isArray(v)?v:[]).forEach(a=>addVariantRow(a.name,a.price));}catch(e){}}
- if(!document.getElementById("variantList").children.length)addVariantRow();openModal("productModal");
-}
-function addVariantRow(name="",price=""){
- const d=document.createElement("div");d.className="variant-row";d.innerHTML=`<input class="vname" placeholder="Variant name" value="${esc(name)}"><input class="vprice" type="number" step="0.01" min="0" placeholder="RM" value="${price}"><button type="button" onclick="this.parentElement.remove()">×</button>`;document.getElementById("variantList").appendChild(d);
-}
-async function saveProduct(){
- const id=document.getElementById("productId").value;
- const variants=[...document.querySelectorAll(".variant-row")].map(r=>({name:r.querySelector(".vname").value.trim(),price:Number(r.querySelector(".vprice").value||0)})).filter(x=>x.name);
- const data={name:document.getElementById("productName").value.trim(),description:document.getElementById("productDescription").value.trim()||null,price:Number(document.getElementById("productPrice").value||0),status:document.getElementById("productStatus").value,variant:variants.map(x=>x.name).join(", "),variants:variants,updated_at:new Date().toISOString()};
- if(!data.name)return alert("Product name is required.");
- let r=id?await db.from("products").update(data).eq("id",id):await db.from("products").insert(data);
- if(r.error)return alert(r.error.message);closeModal("productModal");loadProducts();loadDashboard();
-}
-async function loadAccounts(){
- const r=await db.from("bank_accounts").select("*").order("created_at",{ascending:false});accounts=r.data||[];
- document.getElementById("accountList").innerHTML=accounts.map(x=>`<div class="account-card"><strong>${esc(x.bank_name||"Bank")}</strong><p>Account Name: ${esc(x.account_holder_name||"")}</p><p>Account Number: <strong>${esc(x.account_number||"")}</strong></p><span class="badge ${x.status==="active"?"active":"inactive"}">${esc(x.status||"active")}</span><br><br><button onclick="editAccount('${x.id}')">Edit</button> <button class="danger" onclick="deleteAccount('${x.id}')">Delete</button></div>`).join("")||"<div class='card'>No bank accounts found.</div>";
-}
-function openAccountModal(){
- ["accountId","bankName","accountHolder","accountNumber"].forEach(id=>document.getElementById(id).value="");document.getElementById("accountStatus").value="active";openModal("accountModal");
-}
-function editAccount(id){
- const x=accounts.find(a=>String(a.id)===String(id));if(!x)return;
- document.getElementById("accountId").value=x.id;document.getElementById("bankName").value=x.bank_name||"";document.getElementById("accountHolder").value=x.account_holder_name||"";document.getElementById("accountNumber").value=x.account_number||"";document.getElementById("accountStatus").value=x.status||"active";openModal("accountModal");
-}
-async function saveAccount(){
- const id=document.getElementById("accountId").value;
- const data={bank_name:document.getElementById("bankName").value.trim(),account_holder_name:document.getElementById("accountHolder").value.trim(),account_number:document.getElementById("accountNumber").value.trim(),status:document.getElementById("accountStatus").value,updated_at:new Date().toISOString()};
- if(!data.bank_name||!data.account_number)return alert("Bank name and account number are required.");
- let r=id?await db.from("bank_accounts").update(data).eq("id",id):await db.from("bank_accounts").insert(data);
- if(r.error)return alert(r.error.message);closeModal("accountModal");loadAccounts();
-}
-async function deleteAccount(id){
- if(!confirm("Delete this bank account?"))return;
- const r=await db.from("bank_accounts").delete().eq("id",id);if(r.error)return alert(r.error.message);loadAccounts();
-}
-async function loadOrders(){
- const r=await db.from("orders").select("id,total,payment_method,payment_status,order_status,created_at").order("created_at",{ascending:false}).limit(100);
- document.getElementById("orderTable").innerHTML=(r.data||[]).map(x=>`<tr><td>${esc(x.id)}</td><td>RM ${money(x.total)}</td><td>${esc(x.payment_method||"-")} / ${esc(x.payment_status||"-")}</td><td>${esc(x.order_status||"pending")}</td><td>${new Date(x.created_at).toLocaleString()}</td></tr>`).join("");
-}
-async function loadSettings(){
- try{
-  const r=await db.from("shop_settings").select("*").limit(1).maybeSingle();if(r.data){document.getElementById("settingShopName").value=r.data.shop_name||"";document.getElementById("settingLogoUrl").value=r.data.logo_url||"";document.getElementById("shopName").textContent=r.data.shop_name||"Pasarraya Hameeds";if(r.data.logo_url){document.getElementById("shopLogo").src=r.data.logo_url;document.getElementById("loginLogo").src=r.data.logo_url;}}
- }catch(e){}
-}
-async function saveSettings(){
- const data={shop_name:document.getElementById("settingShopName").value.trim(),logo_url:document.getElementById("settingLogoUrl").value.trim()||null,updated_at:new Date().toISOString()};
- const r=await db.from("shop_settings").upsert(data);if(r.error)return alert(r.error.message);alert("Settings saved.");loadSettings();
-}
-async function saveQr(){
- const data={qr_url:document.getElementById("settingQrUrl").value.trim()||null,updated_at:new Date().toISOString()};
- const r=await db.from("shop_settings").upsert(data);if(r.error)return alert(r.error.message);alert("QR setting saved.");
-}
-async function logout(){await db.auth.signOut();location.reload();}
-function openModal(id){document.getElementById(id).classList.add("show")}
-function closeModal(id){document.getElementById(id).classList.remove("show")}
-document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
-function money(v){return Number(v||0).toLocaleString("en-MY",{minimumFractionDigits:2,maximumFractionDigits:2})}
-function esc(v){return String(v??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;")}
-function showError(m){const e=document.getElementById("loginError");e.textContent=m;e.classList.remove("hidden")}
-function hideError(){document.getElementById("loginError").classList.add("hidden")}
-</script>
-</body>
-</html>
+/* Replace these two values with your existing Supabase Project URL and PUBLISHABLE/anon key. Never put a service_role/secret key in this HTML. */
+const SUPABASE_URL='PASTE_SUPABASE_URL_HERE';
+const SUPABASE_KEY='PASTE_SUPABASE_PUBLISHABLE_OR_ANON_KEY_HERE';
+const db=(window.supabase&&SUPABASE_URL.startsWith('http'))?supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+let products=[],categories=[],editId=null;
+const esc=x=>String(x??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+function notice(id,text,ok=false){let e=document.getElementById(id);e.textContent=text;e.className='status '+(ok?'ok':'err')}
+function show(id){document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('nav button[data-p]').forEach(x=>x.classList.toggle('active',x.dataset.p===id));if(id==='products')loadProducts();if(id==='categories')loadCategories();if(id==='orders')loadOrders();if(id==='customers')loadCustomers();if(id==='staff')loadStaff();if(id==='payments')loadPayments()}
+document.querySelectorAll('nav button[data-p]').forEach(b=>b.onclick=()=>show(b.dataset.p));function closeM(id){document.getElementById(id).classList.remove('open')}function openM(id){document.getElementById(id).classList.add('open')}
+async function dashboard(){if(!db)return;for(const [t,e] of [['products','nProducts'],['categories','nCategories'],['customers','nCustomers'],['orders','nOrders']]){let r=await db.from(t).select('id',{count:'exact',head:true});document.getElementById(e).textContent=r.error?'—':r.count??0}}
+async function loadCategories(){if(!db)return;let r=await db.from('categories').select('*').order('display_order');if(r.error){document.getElementById('categoryRows').innerHTML='<tr><td colspan="4">'+esc(r.error.message)+'</td></tr>';return}categories=r.data||[];document.getElementById('categoryRows').innerHTML=categories.map(c=>`<tr><td>${esc(c.name)}</td><td>${esc(c.description)}</td><td>${c.is_active?'Yes':'No'}</td><td><button class="btn red" onclick="deleteCategory('${c.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="4">No record found</td></tr>';document.getElementById('category').innerHTML='<option value="">Uncategorized</option>'+categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('')}
+function openCategory(){document.getElementById('catName').value='';document.getElementById('catDesc').value='';openM('categoryModal')}
+async function saveCategory(){let name=document.getElementById('catName').value.trim();if(!name)return notice('cmsg','Category name is required');let r=await db.from('categories').insert({name,description:document.getElementById('catDesc').value.trim()||null,is_active:document.getElementById('catActive').checked});if(r.error)return notice('cmsg',r.error.message);closeM('categoryModal');loadCategories();dashboard()}
+async function deleteCategory(id){if(confirm('Delete category?')){let r=await db.from('categories').delete().eq('id',id);if(r.error)alert(r.error.message);loadCategories()}}
+async function loadProducts(){if(!db)return;let r=await db.from('products').select('*,categories(name)').order('created_at',{ascending:false});if(r.error){document.getElementById('productRows').innerHTML='<tr><td colspan="7">'+esc(r.error.message)+'</td></tr>';return}products=r.data||[];renderProducts()}
+function renderProducts(){let q=(document.getElementById('search').value||'').toLowerCase();let a=products.filter(p=>(p.name||'').toLowerCase().includes(q));document.getElementById('productRows').innerHTML=a.map(p=>`<tr><td>${esc(p.name)}</td><td>${esc(p.categories?.name||'—')}</td><td>RM ${Number(p.price||0).toFixed(2)}</td><td>${esc(p.stock_quantity)}</td><td>${p.is_available?'Yes':'No'}</td><td>${p.has_variants?'Yes':'No'}</td><td><button class="btn light" onclick="openProduct('${p.id}')">Edit</button> <button class="btn red" onclick="deleteProduct('${p.id}')">Delete</button></td></tr>`).join('')||'<tr><td colspan="7">No record found</td></tr>'}
+async function openProduct(id){editId=id||null;let p=products.find(x=>x.id===id);document.getElementById('ptitle').textContent=p?'Edit Product':'Add Product';document.getElementById('name').value=p?.name||'';document.getElementById('description').value=p?.description||'';document.getElementById('price').value=p?.price??'';document.getElementById('stock').value=p?.stock_quantity??0;document.getElementById('unit').value=p?.unit||'pcs';document.getElementById('image').value=p?.image_url||'';document.getElementById('available').checked=p?.is_available??true;document.getElementById('featured').checked=p?.is_featured??false;await loadCategories();document.getElementById('category').value=p?.category_id||'';openM('productModal')}
+async function saveProduct(){let data={name:document.getElementById('name').value.trim(),category_id:document.getElementById('category').value||null,description:document.getElementById('description').value.trim()||null,image_url:document.getElementById('image').value.trim()||null,price:Number(document.getElementById('price').value||0),stock_quantity:Number(document.getElementById('stock').value||0),unit:document.getElementById('unit').value.trim()||'pcs',is_available:document.getElementById('available').checked,is_featured:document.getElementById('featured').checked};if(!data.name)return notice('pformmsg','Product name is required');let r=editId?await db.from('products').update(data).eq('id',editId):await db.from('products').insert(data);if(r.error)return notice('pformmsg',r.error.message);closeM('productModal');loadProducts();dashboard()}
+async function deleteProduct(id){if(confirm('Delete product?')){let r=await db.from('products').delete().eq('id',id);if(r.error)alert(r.error.message);loadProducts();dashboard()}}
+function norm(x){return String(x||'').toLowerCase().replace(/[^a-z0-9]/g,'')}function val(row,keys){for(let [k,v] of Object.entries(row)){if(keys.some(x=>norm(k).includes(norm(x)))&&String(v).trim())return String(v).trim()}return ''}
+document.getElementById('csv').onchange=e=>{let f=e.target.files[0];if(!f)return;Papa.parse(f,{header:true,skipEmptyLines:true,complete:x=>importCSV(x.data)});e.target.value=''};
+async function importCSV(rows){let ok=0,bad=0;for(let row of rows){let name=val(row,['itemname','productname','name','item','product']);if(!name){bad++;continue}let cat=val(row,['category','categoryname','department','group']),cid=null;if(cat){let c=categories.find(x=>x.name.toLowerCase()===cat.toLowerCase());if(!c){let cr=await db.from('categories').insert({name:cat}).select().single();if(!cr.error)c=cr.data}cid=c?.id||null}let prices=Object.entries(row).filter(([k,v])=>/(price|amount|rate|cost)/i.test(k)&&String(v).trim()).map(x=>parseFloat(String(x[1]).replace(/[^0-9.-]/g,''))).filter(Number.isFinite),price=prices[0]||0;let data={name,category_id:cid,description:val(row,['description','details'])||null,image_url:val(row,['image','imageurl','photo'])||null,price,stock_quantity:parseFloat(val(row,['stock','quantity','qty']))||0,unit:val(row,['unit','uom'])||'pcs',is_available:true,is_featured:false};let r=await db.from('products').insert(data).select().single();if(r.error){bad++;continue}ok++;if(prices.length>1)for(let i=0;i<prices.length;i++)await db.from('product_variants').insert({product_id:r.data.id,variant_name:'Variant '+(i+1),price:prices[i],unit:data.unit,is_available:true,is_default:i===0,display_order:i})}notice('pmsg',`Imported ${ok} product(s). ${bad?bad+' row(s) skipped.':''}`,bad===0);loadCategories();loadProducts();dashboard()}
+function template(){let b=new Blob(['Name,Category,Price,Stock,Unit,Description,Image URL\nApple,Fruits,5.90,100,kg,Fresh apples,\n'],{type:'text/csv'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='freshmart-products-template.csv';a.click()}
+async function loadOrders(){let r=await db.from('orders').select('*').order('created_at',{ascending:false}).limit(300);document.getElementById('orderRows').innerHTML=r.error?'<tr><td colspan="6">'+esc(r.error.message)+'</td></tr>':(r.data||[]).map(o=>`<tr><td>${esc(o.order_number||o.id.slice(0,8))}</td><td>${esc(o.customer_name)}</td><td>RM ${Number(o.total||0).toFixed(2)}</td><td>${esc(o.order_status||o.status)}</td><td>${esc(o.payment_status)}</td><td>${new Date(o.created_at).toLocaleString()}</td></tr>`).join('')||'<tr><td colspan="6">No record found</td></tr>'}
+async function loadCustomers(){let r=await db.from('customers').select('*').order('created_at',{ascending:false}).limit(500);document.getElementById('customerRows').innerHTML=r.error?'<tr><td colspan="5">'+esc(r.error.message)+'</td></tr>':(r.data||[]).map(c=>`<tr><td>${esc(c.full_name)}</td><td>${esc(c.email)}</td><td>${esc(c.phone)}</td><td>${esc(c.status)}</td><td>${new Date(c.created_at).toLocaleDateString()}</td></tr>`).join('')||'<tr><td colspan="5">No record found</td></tr>'}
+async function loadStaff(){let r=await db.from('profiles').select('id,full_name,email,username,role,status').order('created_at',{ascending:false});document.getElementById('staffRows').innerHTML=r.error?'<tr><td colspan="5">'+esc(r.error.message)+'</td></tr>':(r.data||[]).map(x=>`<tr><td>${esc(x.full_name)}</td><td>${esc(x.email)}</td><td>${esc(x.username)}</td><td>${esc(x.role)}</td><td>${esc(x.status)}</td></tr>`).join('')||'<tr><td colspan="5">No record found</td></tr>'}
+async function loadPayments(){let r=await db.from('payments').select('*').order('created_at',{ascending:false}).limit(300);document.getElementById('paymentRows').innerHTML=r.error?'<tr><td colspan="5">'+esc(r.error.message)+'</td></tr>':(r.data||[]).map(p=>`<tr><td>${esc(p.order_id?.slice(0,8))}</td><td>${esc(p.payment_method)}</td><td>RM ${Number(p.amount||0).toFixed(2)}</td><td>${esc(p.status)}</td><td>${p.paid_at?new Date(p.paid_at).toLocaleString():'—'}</td></tr>`).join('')||'<tr><td colspan="5">No record found</td></tr>'}
+async function testConnection(){let r=await db.from('products').select('id').limit(1);let e=document.getElementById('connection');e.textContent=r.error?r.error.message:'Supabase connection OK';e.style.color=r.error?'#b91c1c':'#15803d'}
+document.getElementById('logout').onclick=async()=>{if(db)await db.auth.signOut();localStorage.removeItem('freshmart_admin_profile');location.href='admin-login.html'};
+(async()=>{if(!db){document.getElementById('loginInfo').textContent='Configure Supabase URL/key';return}let s=await db.auth.getSession();document.getElementById('loginInfo').textContent=s.data.session?.user?.email||'Admin';dashboard()})();
+</script></body></html>
