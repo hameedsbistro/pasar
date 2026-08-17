@@ -27,7 +27,7 @@
 <script>
 /* Supabase connection: replace these two values only if your project credentials differ. */
 const SUPABASE_URL='https://lbcekixommklkkptmfdx.supabase.co';
-const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmUiLCJyb2xlIjoiYW5vbiJ9.REPLACE_WITH_YOUR_ANON_KEY';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiY2VraXhvbW1rbGtrcHRmZHgiLCJyb2xlIjoiYW5vbiIsImlhdCI6MTc4NjcyNDI5OSwiZXhwIjoyMTAyMzAwMjk5fQ.dhiffI_-ufqSE77duUxJ-0FewVpe1uA6oVkQF05H5rM';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 let categories=[],products=[],filtered=[],categoryId=null,page=0,pageSize=100,hasMore=true,cart=[],customer=null;
 try{cart=JSON.parse(localStorage.getItem('pasarraya_cart')||'[]')}catch(e){cart=[]}try{customer=JSON.parse(localStorage.getItem('pasarraya_customer')||'null')}catch(e){customer=null}
