@@ -47,7 +47,7 @@
 }
 </style></head><body>
 
-<div id="loginScreen" class="login"><div class="box"><div class="logo">PH</div><h2 class="center">Pasarraya Hameeds</h2><p class="center muted">Administrator Dashboard</p><form id="loginForm"><div class="field"><label class="label">Username or Email</label><input id="login" class="input" required></div><div class="field"><label class="label">Password</label><div style="position:relative"><input id="password" class="input" type="password" required><button id="eye" type="button" style="position:absolute;right:4px;top:4px;border:0;background:none;padding:8px">👁</button></div></div><button id="loginBtn" class="btn primary" style="width:100%">Login</button><div id="loginError" class="notice error hidden" style="margin-top:12px"></div></form><div class="footer">© 2026 RUDRANGSHI All rights reserved.</div></div></div>
+<div id="loginScreen" class="login"><div class="box"><div class="logo">PH</div><h2 class="center">Pasarraya Hameeds</h2><p class="center muted">Administrator Dashboard</p><form id="loginForm"><div class="field"><label class="label">Username or Email</label><input id="login" class="input" required></div><div class="field"><label class="label">Password</label><div style="position:relative"><input id="password" class="input" type="password" required><button id="eye" type="button" style="position:absolute;right:4px;top:4px;border:0;background:none;padding:8px">👁</button></div></div><button id="loginBtn" class="btn primary" style="width:100%">Login</button><div id="loginError" class="notice error hidden" style="margin-top:12px"></div></form><div class="footer">Copyright © 2026 PROKAS. All rights reserved.<br><span style="opacity:.75">Pasarraya Hameeds (M) SDN BHD.</span></div></div></div>
 
 <div id="app" class="hidden"><aside id="side" class="side"><div class="brand"><div class="mini">PH</div><div><b>Pasarraya Hameeds</b><small>Admin Panel</small></div></div>
 <nav class="nav">
@@ -68,7 +68,7 @@
     </div>
   </div>
 </nav>
-<div class="sidefoot">© 2026 RUDRANGSHI All rights reserved.</div></aside>
+<div class="sidefoot">Copyright © 2026 PROKAS. All rights reserved.<br><span style="opacity:.75">Pasarraya Hameeds (M) SDN BHD.</span></div></aside>
 
 <main class="main"><header class="top"><div><button id="menu" class="btn secondary mobile">☰</button> <b id="title">Dashboard</b></div><div><span id="user" class="muted"></span> <button id="logout" class="btn secondary">Logout</button></div></header><div class="content">
 
@@ -116,7 +116,7 @@
       <table class="table" id="paymentsTable">
         <thead>
           <tr>
-            <th>Date</th>
+            <th>Date &amp; Time</th>
             <th>Payment ID</th>
             <th>Order ID</th>
             <th>Method</th>
@@ -306,7 +306,7 @@
   </div>
 </section>
 
-</div><div class="footer">© 2026 RUDRANGSHI All rights reserved.</div></main></div>
+</div><div class="footer">Copyright © 2026 PROKAS. All rights reserved.<br><span style="opacity:.75">Pasarraya Hameeds (M) SDN BHD.</span></div></main></div>
 
 <!-- Modals -->
 <div id="productModal" class="modal"><div class="modalbox"><div class="mh"><b>Product</b><button class="btn secondary" data-close="productModal">✕</button></div><form id="productForm"><div class="mb"><input id="pid" type="hidden"><div class="grid"><div class="field"><label class="label">Product Name</label><input id="pname" class="input" required></div><div class="field"><label class="label">Category</label><select id="pcat" class="select" required></select></div><div class="field"><label class="label">Price</label><input id="pprice" class="input" type="number" step=".01" required></div><div class="field"><label class="label">Product Image</label><input id="pimage" class="input" type="file" accept="image/*"><small id="pcurrent" class="muted"></small></div><div class="field full"><label><input id="pvariants" type="checkbox"> Has Variants</label><div id="variantBox" class="hidden"><div id="variantRows"></div><button id="addVariant" type="button" class="btn secondary">＋ Add Variant</button></div></div><div class="field full"><label class="label">Description</label><textarea id="pdesc" class="textarea"></textarea></div><div class="field"><label class="label">Stock</label><input id="pstock" class="input" type="number" step=".01" value="0"></div><div class="field"><label class="label">Low Stock Level</label><input id="plow" class="input" type="number" step=".01" value="5"></div><div class="field"><label class="label">Unit</label><input id="punit" class="input"></div><div class="field"><label><input id="pavailable" type="checkbox" checked> Available</label><label><input id="pfeatured" type="checkbox"> Featured</label></div></div><div id="productError" class="notice error hidden"></div></div><div class="mf"><button type="button" class="btn secondary" data-close="productModal">Cancel</button><button id="saveProduct" class="btn primary">Save Product</button></div></form></div></div>
@@ -1644,4 +1644,140 @@ $('refreshProducts').onclick=loadProducts;
 $('refreshOrders').onclick=loadOrders;
 
 restore();
-</script></body></html>
+</script>
+<style>
+#adminChatBtn{position:fixed;right:18px;bottom:18px;z-index:40;border:0;border-radius:14px;background:#2563eb;color:#fff;padding:12px 15px;font-weight:850;box-shadow:0 14px 34px #0003}.admin-chat-grid{display:grid;grid-template-columns:230px 1fr;min-height:430px}.admin-convos{border-right:1px solid #e5e7eb;max-height:520px;overflow:auto}.admin-convo{padding:12px;border-bottom:1px solid #e5e7eb;cursor:pointer}.admin-convo.active{background:#eff6ff}.admin-thread{height:360px;overflow:auto;background:#f8fafc;padding:12px;display:flex;flex-direction:column;gap:8px}.admin-msg{max-width:82%;padding:9px 11px;border-radius:12px;font-size:13px}.admin-me{align-self:flex-end;background:#2563eb;color:#fff}.admin-them{align-self:flex-start;background:#fff;border:1px solid #e5e7eb}@media(max-width:650px){.admin-chat-grid{grid-template-columns:1fr}.admin-convos{max-height:150px;border-right:0;border-bottom:1px solid #e5e7eb}}
+</style>
+<button id="adminChatBtn" onclick="openAdminInbox()">💬 Customer Messages <span id="adminChatCount"></span></button>
+<div id="adminChatModal" class="modal"><div class="modalbox" style="width:min(900px,100%)"><div class="mh"><b>💬 Customer Messages</b><button class="btn secondary" onclick="closeAdminInbox()">✕</button></div><div class="admin-chat-grid"><div id="adminConvos" class="admin-convos"></div><div><div id="adminChatTitle" style="padding:13px;border-bottom:1px solid #e5e7eb;font-weight:900">Select a customer</div><div id="adminThread" class="admin-thread"></div><div style="display:flex;gap:8px;padding:12px"><input id="adminMsgInput" class="input" placeholder="Reply to customer..." onkeydown="if(event.key==='Enter')sendAdminMessage()"><button class="btn primary" onclick="sendAdminMessage()">Send</button></div></div></div></div></div>
+<script>
+let adminSelectedCustomer=null,adminChatChannel=null;
+async function openAdminInbox(customerId=null){$('adminChatModal').classList.add('show');const {data,error}=await db.from('customer_messages').select('customer_id,message,sender_type,created_at').order('created_at',{ascending:false}).limit(600);if(error){$('adminConvos').innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}const latest=new Map();for(const m of data||[])if(!latest.has(String(m.customer_id)))latest.set(String(m.customer_id),m);const ids=[...latest.keys()];let names={};if(ids.length){const {data:c}=await db.from('customers').select('id,full_name,email,phone').in('id',ids);for(const x of c||[])names[String(x.id)]=x}$('adminConvos').innerHTML=ids.length?ids.map(cid=>{const c=names[cid]||{},m=latest.get(cid);return `<div class="admin-convo ${String(adminSelectedCustomer)===cid?'active':''}" onclick="selectAdminCustomer('${esc(cid)}')"><b>${esc(c.full_name||c.email||'Customer')}</b><small class="muted" style="display:block">${esc(String(m.message||'').slice(0,45))}</small></div>`}).join(''):'<div class="empty">No customer messages.</div>';if(customerId)selectAdminCustomer(customerId);updateAdminChatCount();subscribeAdminChat()}
+window.openAdminInbox=openAdminInbox;window.closeAdminInbox=()=>$('adminChatModal').classList.remove('show');
+window.selectAdminCustomer=async function(cid){adminSelectedCustomer=cid;const {data:c}=await db.from('customers').select('full_name,email,phone').eq('id',cid).maybeSingle();$('adminChatTitle').textContent=c?.full_name||c?.email||'Customer';const {data,error}=await db.from('customer_messages').select('*').eq('customer_id',cid).order('created_at',{ascending:true}).limit(300);if(error)return;$('adminThread').innerHTML=(data||[]).map(m=>`<div class="admin-msg ${m.sender_type==='customer'?'admin-them':'admin-me'}"><b style="font-size:10px">${m.sender_type==='customer'?'Customer':'Store'}</b><div>${esc(m.message)}</div></div>`).join('');$('adminThread').scrollTop=$('adminThread').scrollHeight;await db.from('customer_messages').update({is_read:true}).eq('customer_id',cid).eq('sender_type','customer').eq('is_read',false);updateAdminChatCount()}
+window.sendAdminMessage=async function(){if(!adminSelectedCustomer)return alert('Select a customer first.');const i=$('adminMsgInput'),message=i.value.trim();if(!message)return;const senderType=String(S.user?.role||'admin').toLowerCase()==='manager'?'manager':'admin';const {error}=await db.from('customer_messages').insert({customer_id:adminSelectedCustomer,sender_type:senderType,sender_profile_id:S.user?.id||null,message});if(error)return alert(error.message);i.value='';selectAdminCustomer(adminSelectedCustomer)}
+async function updateAdminChatCount(){const {count}=await db.from('customer_messages').select('id',{count:'exact',head:true}).eq('sender_type','customer').eq('is_read',false);$('adminChatCount').textContent=count?'('+count+')':''}
+function subscribeAdminChat(){if(adminChatChannel)return;adminChatChannel=db.channel('admin-customer-chat-'+Date.now()).on('postgres_changes',{event:'INSERT',schema:'public',table:'customer_messages'},p=>{updateAdminChatCount();if(adminSelectedCustomer&&String(p.new.customer_id)===String(adminSelectedCustomer))selectAdminCustomer(adminSelectedCustomer)}).subscribe()}
+setTimeout(()=>{updateAdminChatCount();subscribeAdminChat()},1600);
+</script>
+
+
+<style>.admin-order-ref{font-weight:900;color:#2563eb;font-size:11px}</style>
+<script>
+function shortOrderRef(v){const s=String(v??'').replace(/\s+/g,'');return '#…'+(s.length>5?s.slice(-5):s)}
+const adminReceiptBaseV2=window.openPaymentReceipt;window.openPaymentReceipt=async function(id){await adminReceiptBaseV2(id);setTimeout(async()=>{const p=S.payments.find(x=>String(x.id)===String(id));if(!p)return;let vid=p.verified_by||null;if(!vid&&p.order_id){const {data:o}=await db.from('orders').select('payment_verified_by').eq('id',p.order_id).maybeSingle();vid=o?.payment_verified_by||null}if(!vid)return;const {data:pr}=await db.from('profiles').select('full_name,username,email').eq('id',vid).maybeSingle();const name=pr?.full_name||pr?.username||pr?.email;if(name&&$('receiptModalBody')){const box=document.createElement('div');box.style.cssText='margin-bottom:10px;padding:10px;background:#eff6ff;border-radius:10px;font-size:13px';box.innerHTML='<b>Verified By:</b> '+esc(name);$('receiptModalBody').prepend(box)}},80)};
+window.selectAdminCustomer=async function(cid){adminSelectedCustomer=cid;const {data:c}=await db.from('customers').select('full_name,email,phone').eq('id',cid).maybeSingle();$('adminChatTitle').textContent=c?.full_name||c?.email||'Customer';const {data,error}=await db.from('customer_messages').select('*').eq('customer_id',cid).order('created_at',{ascending:true}).limit(300);if(error)return;const msgs=data||[];const ids=[...new Set(msgs.map(m=>m.sender_profile_id).filter(Boolean))];let staff={};if(ids.length){const {data:p}=await db.from('profiles').select('id,full_name,username,email').in('id',ids);for(const x of p||[])staff[String(x.id)]=x.full_name||x.username||x.email||'Staff'}$('adminThread').innerHTML=msgs.map(m=>{const ref=m.order_id?`<div class="admin-order-ref">${esc(shortOrderRef(m.order_id))}</div>`:'';const who=m.sender_type==='customer'?'Customer':m.sender_type==='system'?(staff[String(m.sender_profile_id)]||'Store Update'):(staff[String(m.sender_profile_id)]||'Store');return `<div class="admin-msg ${m.sender_type==='customer'?'admin-them':'admin-me'}"><b style="font-size:10px">${esc(who)}</b>${ref}<div>${esc(m.message)}</div></div>`}).join('');$('adminThread').scrollTop=$('adminThread').scrollHeight;await db.from('customer_messages').update({is_read:true}).eq('customer_id',cid).eq('sender_type','customer').eq('is_read',false);updateAdminChatCount()};
+</script>
+
+
+<style id="admin-v3-isolation-style">
+/* Strong page isolation: only the selected Admin section can be visible. */
+.content > .page{display:none!important}
+.content > .page.active{display:block!important}
+.main{min-height:100vh;display:flex;flex-direction:column}
+.content{flex:1;width:100%}
+.main > .footer{margin-top:auto;width:100%}
+@media(max-width:700px){.main > .footer{padding-bottom:28px}}
+</style>
+<script id="admin-v3-fixes">
+(function(){
+  const MY_TZ_V3='Asia/Kuala_Lumpur';
+  const fmtMYDateTime=v=>{if(!v)return '—';try{return new Date(v).toLocaleString('en-MY',{timeZone:MY_TZ_V3,year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'});}catch(e){return String(v)}};
+  const payLabel=v=>{const s=String(v||'').trim().toLowerCase().replace(/[\s-]+/g,'_');if(!s)return '—';if(['bank','bank_transfer','banktransfer','transfer'].includes(s))return 'Bank Transfer';if(['qr','qr_code','duitnow','duitnow_qr','duit_now_qr'].includes(s)||s.includes('duitnow')||s.includes('qr'))return 'DuitNow QR';return String(v).replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())};
+  const orderDisplay=o=>String(o?.order_number||o?.order_no||o?.display_order_id||o?.id||'—');
+  async function orderMapFor(ids){const clean=[...new Set((ids||[]).filter(Boolean).map(String))];const m=new Map();if(!clean.length)return m;const {data,error}=await db.from('orders').select('id,order_number').in('id',clean);if(error){console.warn('Order number map:',error);return m;}for(const o of data||[])m.set(String(o.id),orderDisplay(o));return m;}
+  async function paymentMapFor(ids){const clean=[...new Set((ids||[]).filter(Boolean).map(String))];const m=new Map();if(!clean.length)return m;const {data,error}=await db.from('payments').select('order_id,payment_method,method,created_at').in('order_id',clean).order('created_at',{ascending:false});if(error){console.warn('Payment method map:',error);return m;}for(const p of data||[])if(!m.has(String(p.order_id)))m.set(String(p.order_id),payLabel(p.payment_method||p.method));return m;}
+
+  // Force navigation isolation, including mobile.
+  window.nav=function(p){
+    document.querySelectorAll('.content > .page').forEach(x=>{x.classList.remove('active');x.style.display='none';});
+    const target=$(p);if(!target)return;
+    target.classList.add('active');target.style.display='block';
+    document.querySelectorAll('.nav button, .sub-nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
+    if(p==='storeSettings'||p==='bankSettings')$('storeSubMenu')?.classList.remove('hidden');
+    $('title').textContent=p[0].toUpperCase()+p.slice(1);$('side').classList.remove('open');
+    ({dashboard:loadDash,products:loadProducts,categories:loadCategories,inventory:loadInventory,orders:loadOrders,payments:loadPayments,reports:loadReports,staff:loadStaff,storeSettings:loadStoreSettings,bankSettings:loadBankSettings}[p]||(()=>{}))();
+  };
+  document.querySelectorAll('.nav button, .sub-nav button').forEach(x=>{if(x.dataset.page)x.onclick=()=>window.nav(x.dataset.page)});
+
+  // Orders: show customer-facing order number, never internal FK/id.
+  window.loadOrders=async function(){
+    $('orderRows').innerHTML='<tr><td colspan="5" class="empty">Loading orders...</td></tr>';
+    try{
+      const {data,error}=await db.from('orders').select('*').order('created_at',{ascending:false}).limit(500);if(error)throw error;
+      const rows=data||[];
+      $('orderRows').innerHTML=rows.map(o=>`<tr><td><b>${esc(orderDisplay(o))}</b></td><td>${esc(o.customer_name||o.customer_phone||'—')}</td><td><span class="badge active">${esc(o.status||'—')}</span></td><td>${money(o.total??o.total_amount??0)}</td><td>${esc(fmtMYDateTime(o.created_at))}</td></tr>`).join('')||'<tr><td colspan="5" class="empty">No orders found.</td></tr>';
+    }catch(e){$('orderRows').innerHTML=`<tr><td colspan="5" class="empty">${esc(e.message||e)}</td></tr>`}
+  };
+  loadOrders=window.loadOrders;
+
+  // Payments: order number mapping + Malaysia date/time + true payment method.
+  window.loadPayments=async function(){
+    const sVal=$('payStartDate').value,eVal=$('payEndDate').value;let start=new Date(sVal||todayStr),end=new Date(eVal||todayStr);start.setHours(0,0,0,0);end.setHours(23,59,59,999);
+    $('paymentRows').innerHTML='<tr><td colspan="7" class="empty">Loading payments data...</td></tr>';
+    try{
+      const {data,error}=await db.from('payments').select('*').gte('created_at',start.toISOString()).lte('created_at',end.toISOString()).order('created_at',{ascending:false});if(error)throw error;
+      S.payments=data||[];S.paymentOrderMap=await orderMapFor(S.payments.map(p=>p.order_id));
+      $('paymentRows').innerHTML=S.payments.map(p=>`<tr><td>${esc(fmtMYDateTime(p.created_at))}</td><td><b>${esc(p.id)}</b></td><td>${esc(S.paymentOrderMap.get(String(p.order_id))||p.order_id||'—')}</td><td>${esc(payLabel(p.payment_method||p.method))}</td><td><b>${money(p.amount??p.total??0)}</b></td><td><span class="badge active">${esc(p.status||'Success')}</span></td><td class="action-column"><button class="btn secondary" style="padding:4px 10px;font-size:12px" onclick="openPaymentReceipt('${esc(String(p.id))}')">View Receipt</button></td></tr>`).join('')||'<tr><td colspan="7" class="empty">No payments found for selected date range.</td></tr>';
+    }catch(e){$('paymentRows').innerHTML=`<tr><td colspan="7" class="empty">${esc(e.message||e)}</td></tr>`}
+  };
+  loadPayments=window.loadPayments;
+
+  // Reports: use order_number and payment method from payments table.
+  window.loadReports=async function(){
+    const type=$('reportFilterType').value;$('customDateContainer').style.display=type==='custom'?'flex':'none';let start=new Date(),end=new Date();
+    if(type==='today'){start.setHours(0,0,0,0);end.setHours(23,59,59,999)}
+    else if(type==='month'){start=new Date(start.getFullYear(),start.getMonth(),1,0,0,0,0);end=new Date(start.getFullYear(),start.getMonth()+1,0,23,59,59,999)}
+    else if(type==='year'){start=new Date(start.getFullYear(),0,1,0,0,0,0);end=new Date(start.getFullYear(),11,31,23,59,59,999)}
+    else {const sv=$('reportStartDate').value,ev=$('reportEndDate').value;start=sv?new Date(sv):new Date();end=ev?new Date(ev):new Date();start.setHours(0,0,0,0);end.setHours(23,59,59,999)}
+    $('reportRows').innerHTML='<tr><td colspan="11" class="empty">Loading sales statement...</td></tr>';
+    try{
+      const {data,error}=await db.from('orders').select('*').gte('created_at',start.toISOString()).lte('created_at',end.toISOString()).order('created_at',{ascending:false});if(error)throw error;
+      const orders=data||[];S.reports=orders;S.reportPaymentMap=await paymentMapFor(orders.map(o=>o.id));
+      const total=orders.reduce((a,o)=>a+Number(o.total??o.total_amount??0),0);$('repTotalSales').textContent=money(total);$('repTotalOrders').textContent=orders.length;$('repAvgSales').textContent=money(orders.length?total/orders.length:0);
+      $('reportRows').innerHTML=orders.map(o=>`<tr><td><b>${esc(orderDisplay(o))}</b></td><td>${esc(fmtMYDateTime(o.created_at))}</td><td>${esc(o.customer_name||o.user_name||'Customer')}</td><td>${esc(o.phone||o.customer_phone||'—')}</td><td>${esc(S.reportPaymentMap.get(String(o.id))||payLabel(o.payment_method||o.method))}</td><td>${money(o.subtotal||o.total||0)}</td><td>${money(o.discount||0)}</td><td>${money(o.delivery_fee||0)}</td><td><b>${money(o.total??o.total_amount??0)}</b></td><td><span class="badge active">${esc(o.status||'completed')}</span></td><td class="action-column"><button class="btn secondary" style="padding:4px 8px;font-size:11px" onclick="alert('Order #${esc(orderDisplay(o))}')">View</button></td></tr>`).join('')||'<tr><td colspan="11" class="empty">No sales records found for selected period.</td></tr>';
+    }catch(e){$('reportRows').innerHTML=`<tr><td colspan="11" class="empty">${esc(e.message||e)}</td></tr>`}
+  };
+  loadReports=window.loadReports;
+
+  // CSV export uses corrected order number + payment method.
+  window.downloadReportsCsv=function(){if(!S.reports?.length)return showAutoAlert('No Data to Export',2000);const h=['Order ID','Date & Time','Customer Name','Phone','Payment Method','Subtotal','Discount','Delivery Fee','Total Amount','Status'],q=x=>'"'+String(x??'').replace(/"/g,'""')+'"';const rows=S.reports.map(o=>[orderDisplay(o),fmtMYDateTime(o.created_at),o.customer_name||o.user_name||'Customer',o.phone||o.customer_phone||'',S.reportPaymentMap?.get(String(o.id))||payLabel(o.payment_method||o.method),o.subtotal||o.total||0,o.discount||0,o.delivery_fee||0,o.total??o.total_amount??0,o.status||'completed']);download(`Sales_Report_${$('reportFilterType').value}_${new Date().toISOString().split('T')[0]}.csv`,[h,...rows].map(r=>r.map(q).join(',')).join('\n'))};
+  downloadReportsCsv=window.downloadReportsCsv;
+
+  // Print payment statement from corrected rendered rows by data, including time.
+  window.printPayments=async function(){if(!S.payments?.length)return showAutoAlert('No Transaction',2000);if(!S.storeProfile){const {data}=await db.from('store_profile').select('*').limit(1).maybeSingle();if(data)S.storeProfile=data}let pa=$('printArea');if(!pa){pa=document.createElement('div');pa.id='printArea';document.body.appendChild(pa)}const rows=S.payments.map(p=>`<tr><td>${esc(fmtMYDateTime(p.created_at))}</td><td>${esc(p.id)}</td><td>${esc(S.paymentOrderMap?.get(String(p.order_id))||p.order_id||'—')}</td><td>${esc(payLabel(p.payment_method||p.method))}</td><td>${money(p.amount??p.total??0)}</td><td>${esc(p.status||'Success')}</td></tr>`).join('');pa.innerHTML=`<div style="font-family:Arial"><h2>${esc(S.storeProfile?.store_name||'Pasarraya Hameeds')}</h2><h3>Payment Statement</h3><table style="width:100%;border-collapse:collapse"><thead><tr><th>Date & Time</th><th>Payment ID</th><th>Order ID</th><th>Method</th><th>Amount</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;window.print()};
+  printPayments=window.printPayments;
+
+  // Print sales report from corrected data.
+  window.printReports=async function(){if(!S.reports?.length)return showAutoAlert('No Data to Export',2000);if(!S.storeProfile){const {data}=await db.from('store_profile').select('*').limit(1).maybeSingle();if(data)S.storeProfile=data}let pa=$('printArea');if(!pa){pa=document.createElement('div');pa.id='printArea';document.body.appendChild(pa)}const rows=S.reports.map(o=>`<tr><td>${esc(orderDisplay(o))}</td><td>${esc(fmtMYDateTime(o.created_at))}</td><td>${esc(o.customer_name||'Customer')}</td><td>${esc(o.customer_phone||o.phone||'—')}</td><td>${esc(S.reportPaymentMap?.get(String(o.id))||payLabel(o.payment_method||o.method))}</td><td>${money(o.subtotal||o.total||0)}</td><td>${money(o.discount||0)}</td><td>${money(o.delivery_fee||0)}</td><td>${money(o.total??o.total_amount??0)}</td><td>${esc(o.status||'completed')}</td></tr>`).join('');pa.innerHTML=`<div style="font-family:Arial"><h2>${esc(S.storeProfile?.store_name||'Pasarraya Hameeds')}</h2><h3>Sales Report & Statement</h3><table style="width:100%;border-collapse:collapse"><thead><tr><th>Order ID</th><th>Date & Time</th><th>Customer</th><th>Phone</th><th>Payment Method</th><th>Subtotal</th><th>Discount</th><th>Delivery</th><th>Total</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>`;window.print()};
+  printReports=window.printReports;
+
+  // Receipt: ensure customer-facing order number, true payment method, and Verified By name from payment_receipts/payments/orders.
+  const priorReceipt=window.openPaymentReceipt;
+  window.openPaymentReceipt=async function(id){
+    await priorReceipt(id);
+    setTimeout(async()=>{
+      try{
+        const p=S.payments.find(x=>String(x.id)===String(id));if(!p||!$('receiptModalBody'))return;
+        const body=$('receiptModalBody');
+        const map=S.paymentOrderMap||await orderMapFor([p.order_id]);const display=map.get(String(p.order_id))||p.order_id||'—';
+        const divs=[...body.querySelectorAll('div')];
+        for(const d of divs){if(d.textContent.trim().startsWith('Order ID:'))d.innerHTML='<strong>Order ID:</strong> '+esc(display);if(d.textContent.trim().startsWith('Method:'))d.innerHTML='<strong>Method:</strong> '+esc(payLabel(p.payment_method||p.method));}
+        let {data:r}=await db.from('payment_receipts').select('*').eq('payment_id',p.id).order('created_at',{ascending:false}).limit(1).maybeSingle();if(!r&&p.order_id){const z=await db.from('payment_receipts').select('*').eq('order_id',p.order_id).order('created_at',{ascending:false}).limit(1).maybeSingle();r=z.data}
+        let vid=r?.verified_by||p.verified_by||null;if(!vid&&p.order_id){const {data:o}=await db.from('orders').select('payment_verified_by').eq('id',p.order_id).maybeSingle();vid=o?.payment_verified_by||null}
+        body.querySelectorAll('.admin-v3-verified').forEach(x=>x.remove());
+        if(vid){const {data:pr}=await db.from('profiles').select('full_name,username,email').eq('id',vid).maybeSingle();const name=pr?.full_name||pr?.username||pr?.email;if(name){const box=document.createElement('div');box.className='admin-v3-verified';box.style.cssText='margin-bottom:10px;padding:10px;background:#eff6ff;border-radius:10px;font-size:13px';box.innerHTML='<b>Verified By:</b> '+esc(name);body.prepend(box)}}
+      }catch(e){console.warn('Receipt v3:',e)}
+    },120);
+  };
+
+  // Rebind buttons to corrected functions.
+  $('applyPayFilter').onclick=window.loadPayments;$('refreshPayments').onclick=window.loadPayments;$('printPayments').onclick=window.printPayments;
+  $('applyReportFilter').onclick=window.loadReports;$('refreshReports').onclick=window.loadReports;$('printReports').onclick=window.printReports;$('downloadReportsCsv').onclick=window.downloadReportsCsv;
+  $('refreshOrders').onclick=window.loadOrders;
+
+  // Ensure initial page state has only Dashboard visible.
+  document.querySelectorAll('.content > .page').forEach(x=>{if(!x.classList.contains('active'))x.style.display='none'});
+})();
+</script>
+</body></html>
