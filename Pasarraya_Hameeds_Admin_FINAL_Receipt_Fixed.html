@@ -1,0 +1,1647 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pasarraya Hameeds Admin</title>
+
+<!-- Leaflet CSS & JS for OpenStreetMap -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- Supabase JS Client -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- jsPDF & AutoTable for PDF Downloads -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}.hidden{display:none!important}.login{min-height:100vh;display:grid;place-items:center;background:linear-gradient(135deg,#eff6ff,#f5f3ff);padding:20px}.box{background:#fff;border:1px solid #e5e7eb;border-radius:22px;padding:30px;width:min(430px,100%);box-shadow:0 25px 70px #0001}.logo{width:64px;height:64px;margin:auto auto 15px;border-radius:18px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;display:grid;place-items:center;font-weight:900;font-size:23px}.center{text-align:center}.field{display:grid;gap:6px;margin:14px 0}.label{font-size:12px;font-weight:700;color:#475569}.input,.select,.textarea{width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;background:#fff}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}.primary{background:#2563eb;color:#fff}.secondary{background:#eef2f7;color:#374151}.danger{background:#fee2e2;color:#991b1b}.notice{padding:11px;border-radius:10px;font-size:13px}.error{background:#fee2e2;color:#991b1b}.ok{background:#dcfce7;color:#166534}.side{position:fixed;left:0;top:0;bottom:0;width:245px;background:#111827;color:#fff;padding:18px 13px;overflow:auto}.brand{display:flex;gap:10px;align-items:center;padding:8px 8px 22px}.mini{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,#2563eb,#7c3aed);display:grid;place-items:center;font-weight:900}.brand small{display:block;color:#9ca3af}.nav{display:grid;gap:5px}.nav button{border:0;background:transparent;color:#d1d5db;text-align:left;width:100%;padding:11px;border-radius:10px;cursor:pointer}.nav button.active,.nav button:hover{background:#1f2937;color:#fff}.nav-group{display:flex;flex-direction:column;gap:2px}.sub-nav{display:flex;flex-direction:column;gap:4px;padding-left:14px;margin-top:2px}.sub-nav button{font-size:12px;padding:9px 10px;background:#1e293b;color:#cbd5e1;border-radius:8px}.sub-nav button.active,.sub-nav button:hover{background:#2563eb;color:#fff}.sidefoot{margin-top:25px;padding:15px 8px;border-top:1px solid #374151;color:#9ca3af;font-size:11px}.main{margin-left:245px;min-height:100vh}.top{height:70px;background:#fff;border-bottom:1px solid #e5e7eb;display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;z-index:5}.content{padding:24px;max-width:1500px;margin:auto}.page{display:none}.page.active{display:block}.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.head h1{margin:0}.muted{color:#6b7280}.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.card,.tablebox{background:#fff;border:1px solid #e5e7eb;border-radius:17px;box-shadow:0 10px 30px #0f172a0c;padding:18px}.num{font-size:28px;font-weight:900;margin-top:8px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tablebox{padding:0;overflow:hidden}.scroll{overflow-x:auto}.table{width:100%;min-width:1000px;border-collapse:collapse}.table th,.table td{padding:12px;border-bottom:1px solid #e5e7eb;text-align:left;font-size:13px}.table th{background:#f8fafc;color:#64748b;font-size:11px;text-transform:uppercase}.namecol{width:190px;max-width:190px}.namecell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.thumb{width:42px;height:42px;object-fit:cover;border-radius:99px}.badge{padding:5px 9px;border-radius:99px;font-size:11px;font-weight:700}.active{background:#dcfce7;color:#166534}.inactive{background:#f3f4f6;color:#6b7280}.low{background:#fef3c7;color:#92400e}.empty{text-align:center;color:#6b7280;padding:40px!important}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}.modal.show{display:flex}.modalbox{background:#fff;width:min(760px,100%);max-height:92vh;overflow:auto;border-radius:19px}.mh,.mf{padding:17px 20px;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between}.mf{border-top:1px solid #e5e7eb;border-bottom:0;justify-content:flex-end;gap:8px}.mb{padding:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:13px}.full{grid-column:1/-1}.footer{text-align:center;color:#64748b;font-size:11px;padding:24px}@media(max-width:900px){.cards{grid-template-columns:1fr 1fr}}@media(max-width:700px){.side{transform:translateX(-100%)}.side.open{transform:translateX(0);z-index:30}.main{margin-left:0}.cards,.grid{grid-template-columns:1fr}.mobile{display:block!important}}
+.mobile{display:none}
+#map{height:300px;width:100%;border-radius:10px;border:1px solid #d1d5db;margin-top:6px}
+
+/* Print Specific Rules */
+@media print {
+  body * {
+    visibility: hidden !important;
+  }
+  #printArea, #printArea * {
+    visibility: visible !important;
+  }
+  #printArea {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  @page {
+    margin-left: 4mm;
+    margin-right: 4mm;
+    margin-top: 10mm;
+    margin-bottom: 10mm;
+    size: auto;
+  }
+}
+</style></head><body>
+
+<div id="loginScreen" class="login"><div class="box"><div class="logo">PH</div><h2 class="center">Pasarraya Hameeds</h2><p class="center muted">Administrator Dashboard</p><form id="loginForm"><div class="field"><label class="label">Username or Email</label><input id="login" class="input" required></div><div class="field"><label class="label">Password</label><div style="position:relative"><input id="password" class="input" type="password" required><button id="eye" type="button" style="position:absolute;right:4px;top:4px;border:0;background:none;padding:8px">👁</button></div></div><button id="loginBtn" class="btn primary" style="width:100%">Login</button><div id="loginError" class="notice error hidden" style="margin-top:12px"></div></form><div class="footer">© 2026 RUDRANGSHI All rights reserved.</div></div></div>
+
+<div id="app" class="hidden"><aside id="side" class="side"><div class="brand"><div class="mini">PH</div><div><b>Pasarraya Hameeds</b><small>Admin Panel</small></div></div>
+<nav class="nav">
+  <button class="active" data-page="dashboard">📊 Dashboard</button>
+  <button data-page="products">🛍️ Products</button>
+  <button data-page="categories">🏷️ Categories</button>
+  <button data-page="inventory">📦 Inventory</button>
+  <button data-page="orders">🧾 Orders</button>
+  <button data-page="payments">💳 Payments</button>
+  <button data-page="reports">📈 Reports</button>
+  <button data-page="staff">👥 Staff</button>
+  
+  <div class="nav-group">
+    <button type="button" id="storeDropdownBtn" class="nav-drop-btn">🏪 Store Settings <span style="float:right;font-size:10px;">▼</span></button>
+    <div id="storeSubMenu" class="sub-nav hidden">
+      <button data-page="storeSettings">📍 Store Profile & Location</button>
+      <button data-page="bankSettings">🏦 Bank Account Settings</button>
+    </div>
+  </div>
+</nav>
+<div class="sidefoot">© 2026 RUDRANGSHI All rights reserved.</div></aside>
+
+<main class="main"><header class="top"><div><button id="menu" class="btn secondary mobile">☰</button> <b id="title">Dashboard</b></div><div><span id="user" class="muted"></span> <button id="logout" class="btn secondary">Logout</button></div></header><div class="content">
+
+<section id="dashboard" class="page active"><div class="head"><div><h1>Dashboard</h1><p class="muted">Store overview.</p></div><button id="refreshDash" class="btn secondary">↻ Refresh</button></div><div class="cards"><div class="card"><span class="muted">Products</span><div id="np" class="num">0</div></div><div class="card"><span class="muted">Categories</span><div id="nc" class="num">0</div></div><div class="card"><span class="muted">Low Stock</span><div id="nl" class="num">0</div></div><div class="card"><span class="muted">Staff</span><div id="ns" class="num">0</div></div></div></section>
+
+<section id="products" class="page"><div class="head"><div><h1>Products</h1><p class="muted">CSV, products and images.</p></div><button id="addProduct" class="btn primary">＋ Add Product</button></div><div class="card" style="margin-bottom:15px"><b>CSV Tools</b><div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><label class="btn primary">⬆ Upload CSV<input id="csv" type="file" accept=".csv,text/csv" hidden></label><label class="btn secondary">⬆ Upload PDF<input id="pdf" type="file" accept="application/pdf,.pdf" hidden></label><button id="allCsv" class="btn secondary">⬇ Download All CSV</button><select id="catCsv" class="select" style="width:auto"><option value="">Category CSV...</option></select><button id="oneCsv" class="btn secondary">⬇ Download Category CSV</button></div><div id="csvMsg" class="notice" style="margin-top:12px;background:#eff6ff;color:#1e40af">CSV and PDF are read in the browser and update the database directly; the source CSV/PDF is not stored.</div></div><div class="toolbar"><input id="search" class="input" placeholder="Search product name..." style="max-width:280px"><select id="filter" class="select" style="max-width:220px"><option value="">All categories</option></select><button id="refreshProducts" class="btn secondary">↻ Refresh</button></div><div class="tablebox"><div class="scroll"><table class="table"><thead><tr><th>Image</th><th class="namecol">Product Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody id="productRows"></tbody></table></div></div></section>
+
+<section id="categories" class="page"><div class="head"><h1>Categories</h1><button id="addCategory" class="btn primary">＋ Add Category</button></div><div class="tablebox"><div class="scroll"><table class="table"><thead><tr><th>Name</th><th>Description</th><th>Active</th><th>Order</th><th>Actions</th></tr></thead><tbody id="categoryRows"></tbody></table></div></div></section>
+
+<section id="inventory" class="page"><div class="head"><h1>Inventory</h1><button id="refreshInventory" class="btn secondary">↻ Refresh</button></div><div class="tablebox"><div class="scroll"><table class="table"><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Low Stock Level</th><th>Status</th><th>Action</th></tr></thead><tbody id="inventoryRows"></tbody></table></div></div></section>
+
+<section id="orders" class="page"><div class="head"><h1>Orders</h1><button id="refreshOrders" class="btn secondary">↻ Refresh</button></div><div class="tablebox"><div class="scroll"><table class="table"><thead><tr><th>ID</th><th>Customer</th><th>Status</th><th>Total</th><th>Created</th></tr></thead><tbody id="orderRows"></tbody></table></div></div></section>
+
+<section id="payments" class="page">
+  <div class="head">
+    <div>
+      <h1>💳 Payments</h1>
+      <p class="muted">View and filter payment transaction statements.</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button id="downloadPaymentsPdf" class="btn primary" style="background:#10b981;">📄 Download as PDF</button>
+      <button id="printPayments" class="btn primary" style="background:#6366f1;">🖨️ Print Statement</button>
+      <button id="refreshPayments" class="btn secondary">↻ Refresh</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:18px">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+      <div class="field" style="margin:0;">
+        <label class="label">From Date</label>
+        <input id="payStartDate" type="date" class="input">
+      </div>
+      <div class="field" style="margin:0;">
+        <label class="label">To Date</label>
+        <input id="payEndDate" type="date" class="input">
+      </div>
+      <div>
+        <button id="applyPayFilter" class="btn primary">Search Payments</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="tablebox">
+    <div class="scroll">
+      <table class="table" id="paymentsTable">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Payment ID</th>
+            <th>Order ID</th>
+            <th>Method</th>
+            <th>Amount</th>
+            <th>Status</th>
+            <th class="action-column">Receipt</th>
+          </tr>
+        </thead>
+        <tbody id="paymentRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="reports" class="page">
+  <div class="head">
+    <div><h1>📈 Sales Reports & Statements</h1><p class="muted">View daily, monthly, yearly, and custom date range sales statements.</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button id="downloadReportsCsv" class="btn primary" style="background:#059669;">📊 Download CSV</button>
+      <button id="downloadReportsPdf" class="btn primary" style="background:#10b981;">📄 Download as PDF</button>
+      <button id="printReports" class="btn primary" style="background:#6366f1;">🖨️ Print Statement</button>
+      <button id="refreshReports" class="btn secondary">↻ Refresh</button>
+    </div>
+  </div>
+  
+  <div class="card" style="margin-bottom:18px">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+      <div class="field" style="margin:0; min-width:180px;">
+        <label class="label">Report Type</label>
+        <select id="reportFilterType" class="select">
+          <option value="today" selected>Today (Last 24 Hours)</option>
+          <option value="month">This Month</option>
+          <option value="year">This Year</option>
+          <option value="custom">Custom Date Range</option>
+        </select>
+      </div>
+
+      <div id="customDateContainer" style="display:none; gap:8px; align-items:center;">
+        <div class="field" style="margin:0;">
+          <label class="label">From Date</label>
+          <input id="reportStartDate" type="date" class="input">
+        </div>
+        <div class="field" style="margin:0;">
+          <label class="label">To Date</label>
+          <input id="reportEndDate" type="date" class="input">
+        </div>
+      </div>
+
+      <div>
+        <button id="applyReportFilter" class="btn primary">Filter Statement</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cards" style="margin-bottom:20px;">
+    <div class="card">
+      <span class="muted">Total Sales Amount</span>
+      <div id="repTotalSales" class="num" style="color:#2563eb;">RM 0.00</div>
+    </div>
+    <div class="card">
+      <span class="muted">Total Orders</span>
+      <div id="repTotalOrders" class="num">0</div>
+    </div>
+    <div class="card">
+      <span class="muted">Average Order Value</span>
+      <div id="repAvgSales" class="num">RM 0.00</div>
+    </div>
+  </div>
+
+  <div class="tablebox">
+    <div class="scroll">
+      <table class="table" id="reportsTable">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date & Time</th>
+            <th>Customer Name</th>
+            <th>Phone</th>
+            <th>Payment Method</th>
+            <th>Subtotal</th>
+            <th>Discount</th>
+            <th>Delivery Fee</th>
+            <th>Total Amount</th>
+            <th>Status</th>
+            <th class="action-column">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="reportRows"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="staff" class="page"><div class="head"><div><h1>Staff</h1><p class="muted">Loaded from public.profiles.</p></div><div><button id="refreshStaff" class="btn secondary" style="margin-right:6px">↻ Refresh</button><button id="addStaff" class="btn primary">＋ Add Staff</button></div></div><div class="tablebox"><div class="scroll"><table class="table"><thead><tr><th>Name</th><th>Username</th><th>Email</th><th>Phone</th><th>Role</th><th>Status</th><th>Actions</th></tr></thead><tbody id="staffRows"></tbody></table></div></div></section>
+
+<section id="storeSettings" class="page">
+  <div class="head">
+    <div><h1>🏪 Store Profile & Location Settings</h1><p class="muted">Manage shop details, location coordinates and delivery pricing.</p></div>
+    <button type="button" id="saveStoreBtn" class="btn primary">💾 Save Store Settings</button>
+  </div>
+  <div class="card">
+    <form id="storeForm">
+      <div class="grid">
+        <div class="field"><label class="label">Store Name</label><input id="stName" class="input" required placeholder="Pasarraya Hameeds"></div>
+        <div class="field"><label class="label">Tagline / Subtitle</label><input id="stTagline" class="input" placeholder="e.g. Fresh Mart • Malaysia"></div>
+        
+        <div class="field full">
+          <label class="label">Select Location on Map (Click or Drag Marker)</label>
+          <div id="map"></div>
+        </div>
+
+        <div class="field full"><label class="label">Full Street Address (Auto Filled)</label><input id="stAddress" class="input" required placeholder="Select location on map above..."></div>
+        <div class="field"><label class="label">City</label><input id="stCity" class="input"></div>
+        <div class="field"><label class="label">State</label><input id="stState" class="input"></div>
+        <div class="field"><label class="label">Postcode</label><input id="stPostcode" class="input"></div>
+        <div class="field"><label class="label">Country</label><input id="stCountry" class="input" value="Malaysia"></div>
+        
+        <input id="stLat" type="hidden" value="2.7533">
+        <input id="stLon" type="hidden" value="101.7042">
+
+        <div class="field"><label class="label">Phone Number</label><input id="stPhone" class="input"></div>
+        <div class="field"><label class="label">WhatsApp Number</label><input id="stWhatsapp" class="input"></div>
+        <div class="field"><label class="label">Email Address</label><input id="stEmail" class="input" type="email"></div>
+        <div class="field"><label class="label">Business Hours</label><input id="stHours" class="input" placeholder="e.g. 8:00 AM - 10:00 PM (Daily)"></div>
+        
+        <div class="field full" style="margin-top:10px; border-top:1px solid #eee; padding-top:15px;"><b style="color:#2563eb">🚚 Delivery Pricing Rules</b></div>
+        <div class="field"><label class="label">Base Delivery Fee (RM)</label><input id="stBaseFee" class="input" type="number" step="0.01" value="7.00"></div>
+        <div class="field"><label class="label">Included Free Radius (KM)</label><input id="stFreeKm" class="input" type="number" step="0.1" value="2.0"></div>
+        <div class="field"><label class="label">Extra Charge Per KM (RM)</label><input id="stPerKmFee" class="input" type="number" step="0.01" value="1.00"></div>
+        <div class="field full"><label class="label">Store Logo Image</label><input id="stLogoFile" class="input" type="file" accept="image/*"><small id="stLogoCurrent" class="muted"></small></div>
+      </div>
+      <div id="storeMsg" class="notice hidden" style="margin-top:15px"></div>
+    </form>
+  </div>
+</section>
+
+<section id="bankSettings" class="page">
+  <div class="head">
+    <div>
+      <h1>🏦 Bank Account Settings</h1>
+      <p class="muted">Manage payment bank accounts and upload DuitNow QR Codes for each account.</p>
+    </div>
+    <button type="button" id="refreshBank" class="btn secondary">↻ Refresh</button>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <h3 style="margin:0 0 10px 0;">➕ Add Bank Account</h3>
+    <form id="bankAccountForm">
+      <div class="grid">
+        <div class="field">
+          <label class="label">Bank Name</label>
+          <input id="bName" class="input" required placeholder="e.g. Maybank / CIMB Bank">
+        </div>
+        <div class="field">
+          <label class="label">Bank Account Number</label>
+          <input id="bAccNum" class="input" required placeholder="e.g. 019638369926">
+        </div>
+        <div class="field full">
+          <label class="label">Beneficiary Name</label>
+          <input id="bBeneficiary" class="input" required placeholder="e.g. Prokash Rakshit">
+        </div>
+      </div>
+      <button type="submit" id="saveBankBtn" class="btn primary" style="margin-top:10px;">💾 Save Bank Account</button>
+      <div id="bankMsg" class="notice hidden" style="margin-top:12px"></div>
+    </form>
+  </div>
+
+  <div class="card">
+    <h3 style="margin:0 0 12px 0;">📋 Existing Bank Accounts</h3>
+    <div class="tablebox">
+      <div class="scroll">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Default</th>
+              <th>Bank Name</th>
+              <th>Account Number</th>
+              <th>Beneficiary Name</th>
+              <th>DuitNow QR Code</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="bankRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><div class="footer">© 2026 RUDRANGSHI All rights reserved.</div></main></div>
+
+<!-- Modals -->
+<div id="productModal" class="modal"><div class="modalbox"><div class="mh"><b>Product</b><button class="btn secondary" data-close="productModal">✕</button></div><form id="productForm"><div class="mb"><input id="pid" type="hidden"><div class="grid"><div class="field"><label class="label">Product Name</label><input id="pname" class="input" required></div><div class="field"><label class="label">Category</label><select id="pcat" class="select" required></select></div><div class="field"><label class="label">Price</label><input id="pprice" class="input" type="number" step=".01" required></div><div class="field"><label class="label">Product Image</label><input id="pimage" class="input" type="file" accept="image/*"><small id="pcurrent" class="muted"></small></div><div class="field full"><label><input id="pvariants" type="checkbox"> Has Variants</label><div id="variantBox" class="hidden"><div id="variantRows"></div><button id="addVariant" type="button" class="btn secondary">＋ Add Variant</button></div></div><div class="field full"><label class="label">Description</label><textarea id="pdesc" class="textarea"></textarea></div><div class="field"><label class="label">Stock</label><input id="pstock" class="input" type="number" step=".01" value="0"></div><div class="field"><label class="label">Low Stock Level</label><input id="plow" class="input" type="number" step=".01" value="5"></div><div class="field"><label class="label">Unit</label><input id="punit" class="input"></div><div class="field"><label><input id="pavailable" type="checkbox" checked> Available</label><label><input id="pfeatured" type="checkbox"> Featured</label></div></div><div id="productError" class="notice error hidden"></div></div><div class="mf"><button type="button" class="btn secondary" data-close="productModal">Cancel</button><button id="saveProduct" class="btn primary">Save Product</button></div></form></div></div>
+<div id="categoryModal" class="modal"><div class="modalbox"><div class="mh"><b>Category</b><button class="btn secondary" data-close="categoryModal">✕</button></div><form id="categoryForm"><div class="mb"><input id="cid" type="hidden"><div class="field"><label class="label">Category Name</label><input id="cname" class="input" required></div><div class="field"><label class="label">Description</label><textarea id="cdesc" class="textarea"></textarea></div><label><input id="cactive" type="checkbox" checked> Active</label><div id="categoryError" class="notice error hidden"></div></div><div class="mf"><button type="button" class="btn secondary" data-close="categoryModal">Cancel</button><button class="btn primary">Save Category</button></div></form></div></div>
+<div id="staffModal" class="modal"><div class="modalbox"><div class="mh"><b>Staff</b><button class="btn secondary" data-close="staffModal">✕</button></div><form id="staffForm"><div class="mb"><input id="sid" type="hidden"><div class="grid"><div class="field"><label class="label">Full Name</label><input id="sname" class="input" required></div><div class="field"><label class="label">Username</label><input id="suser" class="input"></div><div class="field"><label class="label">Email</label><input id="semail" class="input"></div><div class="field"><label class="label">Phone</label><input id="sphone" class="input"></div><div class="field"><label class="label">Role</label><select id="srole" class="select"><option value="admin">admin</option><option value="manager">manager</option><option value="cashier">cashier</option></select></div><div class="field"><label class="label">Status</label><select id="sstatus" class="select"><option value="active">active</option><option value="inactive">inactive</option></select></div><div class="field"><label class="label">Password</label><input id="spass" class="input" type="password"></div><div class="field"><label class="label">Profile Picture</label><input id="spic" class="input" type="file" accept="image/*"></div></div><div class="notice" style="background:#eff6ff;color:#1e40af;margin-top:12px">Staff password will be updated if provided.</div><div id="staffError" class="notice error hidden"></div></div><div class="mf"><button type="button" class="btn secondary" data-close="staffModal">Cancel</button><button class="btn primary">Save Staff</button></div></form></div></div>
+
+<!-- Payment Receipt Popup Modal -->
+<div id="receiptModal" class="modal">
+  <div class="modalbox" style="max-width:480px;">
+    <div class="mh">
+      <b>Payment Receipt</b>
+      <button class="btn secondary" onclick="$('receiptModal').classList.remove('show')">✕</button>
+    </div>
+    <div class="mb" id="receiptModalBody"></div>
+    <div class="mf">
+      <button type="button" class="btn secondary" onclick="$('receiptModal').classList.remove('show')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+'use strict';
+const SUPABASE_URL='https://lbcekixommklkkptmfdx.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxiY2VraXhvbW1rbGtrcHRtZmR4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY3MjQyOTksImV4cCI6MjEwMjMwMDI5OX0.dhiffI_-ufqSE77duUxJ-0FewVpe1uA6oVkQF05H5rM';
+const BUCKET='shop-assets',db=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY),S={products:[],categories:[],staff:[],payments:[],reports:[],user:null,storeProfile:null};
+const $=x=>document.getElementById(x),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c])),norm=x=>String(x??'').toLowerCase().trim().replace(/[\s_\-\/().]+/g,''),slug=x=>String(x??'item').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),money=x=>'RM '+Number(x||0).toFixed(2);
+
+let storeMap = null, storeMarker = null;
+
+function showAutoAlert(msgText, duration = 2000) {
+  let modal = document.getElementById('autoAlertModal');
+  if(!modal){
+    modal = document.createElement('div');
+    modal.id = 'autoAlertModal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.3s ease;';
+    modal.innerHTML = `<div style="background:#fff;padding:24px 32px;border-radius:16px;text-align:center;box-shadow:0 20px 40px rgba(0,0,0,0.2);max-width:320px;width:90%;"><div style="font-size:36px;margin-bottom:8px;">⚠️</div><div style="font-size:18px;font-weight:bold;color:#1e293b;" id="autoAlertMsg"></div></div>`;
+    document.body.appendChild(modal);
+  }
+  document.getElementById('autoAlertMsg').textContent = msgText;
+  modal.style.display = 'flex';
+  modal.style.opacity = '1';
+  setTimeout(() => {
+    modal.style.opacity = '0';
+    setTimeout(() => { modal.style.display = 'none'; }, 300);
+  }, duration);
+}
+
+$('storeDropdownBtn').onclick = () => {
+  $('storeSubMenu').classList.toggle('hidden');
+};
+
+function nav(p){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  $(p).classList.add('active');
+  document.querySelectorAll('.nav button, .sub-nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===p));
+  
+  if(p==='storeSettings' || p==='bankSettings'){
+    $('storeSubMenu').classList.remove('hidden');
+  }
+
+  $('title').textContent=p[0].toUpperCase()+p.slice(1);
+  $('side').classList.remove('open');
+  ({
+    dashboard:loadDash,
+    products:loadProducts,
+    categories:loadCategories,
+    inventory:loadInventory,
+    orders:loadOrders,
+    payments:loadPayments,
+    reports:loadReports,
+    staff:loadStaff,
+    storeSettings:loadStoreSettings,
+    bankSettings:loadBankSettings
+  }[p]||(()=>{}))();
+}
+
+document.querySelectorAll('.nav button, .sub-nav button').forEach(x=>{
+  if(x.dataset.page) x.onclick=()=>nav(x.dataset.page);
+});
+document.querySelectorAll('[data-go]').forEach(x=>x.onclick=()=>nav(x.dataset.go));
+$('menu').onclick=()=>$('side').classList.toggle('open');
+document.querySelectorAll('[data-close]').forEach(x=>$(x.dataset.close).onclick=()=>$(x.dataset.close).classList.remove('show'));
+
+$('eye').onclick=()=>{$('password').type=$('password').type==='password'?'text':'password'};
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  $('loginBtn').disabled=true;
+  try{
+    const {data,error}=await db.rpc('verify_profile_password',{p_login:$('login').value.trim(),p_password:$('password').value});
+    if(error)throw error;
+    const r=Array.isArray(data)?data[0]:data;
+    if(!r)throw Error('Invalid credentials.');
+    if(!['admin','manager'].includes(String(r.role).toLowerCase()))throw Error('This account has no admin access.');
+    if(r.status!=='active')throw Error('This account is inactive.');
+    S.user=r;
+    localStorage.setItem('ph_admin',JSON.stringify({id:r.id}));
+    $('user').textContent=(r.full_name||r.username||r.email)+' · '+r.role;
+    $('loginScreen').classList.add('hidden');
+    $('app').classList.remove('hidden');
+    await loadDash();
+  }catch(x){
+    $('loginError').textContent=x.message||'Invalid credentials.';
+    $('loginError').classList.remove('hidden');
+  }finally{$('loginBtn').disabled=false}
+};
+
+$('logout').onclick=()=>{localStorage.removeItem('ph_admin');location.reload()};
+
+async function restore(){
+  try{
+    const x=JSON.parse(localStorage.getItem('ph_admin')||'null');
+    if(!x)return;
+    const {data}=await db.from('profiles').select('id,full_name,email,username,role,status').eq('id',x.id).maybeSingle();
+    if(data&&data.status==='active'&&['admin','manager'].includes(data.role)){
+      S.user=data;
+      $('user').textContent=(data.full_name||data.username||data.email)+' · '+data.role;
+      $('loginScreen').classList.add('hidden');
+      $('app').classList.remove('hidden');
+      await loadDash();
+    }
+  }catch(e){}
+}
+
+async function fetchAllRows(table, columns='*', orderCol='created_at') {
+  const out=[]; const pageSize=1000; let from=0;
+  while(true){
+    let q=db.from(table).select(columns).range(from,from+pageSize-1);
+    if(orderCol) q=q.order(orderCol,{ascending:false});
+    const {data,error}=await q;
+    if(error) throw error;
+    out.push(...(data||[]));
+    if(!data || data.length<pageSize) break;
+    from+=pageSize;
+  }
+  return out;
+}
+
+async function loadDash(){
+  try{
+    const[p,c,s]=await Promise.all([
+      fetchAllRows('products','id,stock_quantity',null),
+      fetchAllRows('categories','id',null),
+      db.from('profiles').select('id')
+    ]);
+    $('np').textContent=p.length;
+    $('nc').textContent=c.length;
+    $('ns').textContent=(s.data||[]).length;
+    $('nl').textContent=p.filter(x=>Number(x.stock_quantity||0)<=5).length;
+  }catch(e){console.error(e)}
+}
+
+async function loadCategories(){
+  const{data,error}=await db.from('categories').select('*').order('display_order');
+  if(error)return $('categoryRows').innerHTML='<tr><td colspan=5 class=empty>'+esc(error.message)+'</td></tr>';
+  S.categories=data||[];
+  fillCats();
+  $('categoryRows').innerHTML=S.categories.map(c=>`<tr><td><b>${esc(c.name)}</b></td><td>${esc(c.description||'')}</td><td>${c.is_active?'Active':'Inactive'}</td><td>${c.display_order??0}</td><td><button class="btn secondary" onclick="editCategory('${c.id}')">Edit</button></td></tr>`).join('')||'<tr><td colspan=5 class=empty>No categories found.</td></tr>';
+}
+
+function fillCats(){
+  $('pcat').innerHTML='<option value="">Select category</option>'+S.categories.filter(c=>c.is_active!==false).map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  $('filter').innerHTML='<option value="">All categories</option>'+S.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+  $('catCsv').innerHTML='<option value="">Category CSV...</option>'+S.categories.map(c=>`<option value="${c.id}">${esc(c.name)}</option>`).join('');
+}
+
+$('addCategory').onclick=()=>{$('cid').value='';$('cname').value='';$('cdesc').value='';$('cactive').checked=true;$('categoryModal').classList.add('show')};
+window.editCategory=id=>{let c=S.categories.find(x=>x.id===id);if(!c)return;$('cid').value=c.id;$('cname').value=c.name;$('cdesc').value=c.description||'';$('cactive').checked=c.is_active!==false;$('categoryModal').classList.add('show')};
+
+$('categoryForm').onsubmit=async e=>{
+  e.preventDefault();
+  const p={name:$('cname').value.trim(),description:$('cdesc').value.trim()||null,is_active:$('cactive').checked,updated_at:new Date().toISOString()},id=$('cid').value,r=id?await db.from('categories').update(p).eq('id',id):await db.from('categories').insert(p);
+  if(r.error)return alert(r.error.message);
+  $('categoryModal').classList.remove('show');
+  await loadCategories();
+  await loadProducts();
+};
+
+async function loadProducts(){
+  try{
+    const data=await fetchAllRows('products','id,category_id,name,description,image_url,price,stock_quantity,unit,is_available,is_featured,has_variants','name');
+    S.products=data;
+    if(!S.categories.length)await loadCategories();
+    renderProducts();
+  }catch(error){
+    $('productRows').innerHTML='<tr><td colspan=7 class=empty>'+esc(error.message)+'</td></tr>';
+  }
+}
+
+function cname(id){return S.categories.find(x=>x.id===id)?.name||'Uncategorized'}
+function renderProducts(){
+  let q=$('search').value.toLowerCase(),f=$('filter').value,a=S.products.filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!f||p.category_id===f));
+  $('productRows').innerHTML=a.map(p=>`<tr><td>${p.image_url?`<img class=thumb src="${esc(p.image_url)}">`:'—'}</td><td class="namecell namecol">${esc(p.name)}</td><td>${esc(cname(p.category_id))}</td><td>${money(p.price)}</td><td>${p.stock_quantity??0} ${esc(p.unit||'')}</td><td>${p.is_available?'Available':'Unavailable'}</td><td><button class="btn secondary" onclick="editProduct('${p.id}')">Edit</button></td></tr>`).join('')||'<tr><td colspan=7 class=empty>No products found.</td></tr>';
+}
+
+$('search').oninput=renderProducts;
+$('filter').onchange=renderProducts;
+$('refreshProducts').onclick=loadProducts;
+
+function clearProduct(){$('pid').value='';$('pname').value='';$('pprice').value='';$('pdesc').value='';$('pstock').value=0;$('plow').value=5;$('punit').value='';$('pavailable').checked=true;$('pfeatured').checked=false;$('pvariants').checked=false;$('variantBox').classList.add('hidden');$('variantRows').innerHTML='';$('pcurrent').textContent=''}
+$('addProduct').onclick=()=>{clearProduct();$('productModal').classList.add('show')};
+window.editProduct=id=>{let p=S.products.find(x=>x.id===id);if(!p)return;clearProduct();$('pid').value=p.id;$('pname').value=p.name;$('pcat').value=p.category_id||'';$('pprice').value=p.price??'';$('pdesc').value=p.description||'';$('pstock').value=p.stock_quantity??0;$('punit').value=p.unit||'';$('pavailable').checked=p.is_available!==false;$('pfeatured').checked=!!p.is_featured;$('pvariants').checked=!!p.has_variants;$('variantBox').classList.toggle('hidden',!p.has_variants);$('pcurrent').textContent=p.image_url?'Current image saved.':'';$('productModal').classList.add('show')};
+
+async function upload(file,folder,name){
+  if(!file)return null;
+  let ext=(file.name.split('.').pop()||'jpg').replace(/[^a-z0-9]/gi,'').toLowerCase();
+  let path=folder+'/'+slug(name)+'-'+crypto.randomUUID()+'.'+ext;
+  let{data,error}=await db.storage.from(BUCKET).upload(path,file,{contentType:file.type||'image/jpeg',upsert:false});
+  if(error)throw Error('Image upload failed: '+error.message);
+  return db.storage.from(BUCKET).getPublicUrl(data.path).data.publicUrl;
+}
+
+$('pvariants').onchange=()=>{$('variantBox').classList.toggle('hidden',!$('pvariants').checked)};
+$('addVariant').onclick=()=>{let d=document.createElement('div');d.style='display:grid;grid-template-columns:1fr 130px auto;gap:7px;margin:7px 0';d.innerHTML='<input class=input placeholder="Variant name"><input class=input type=number step=.01 placeholder=Price><button type=button class="btn danger">✕</button>';d.querySelector('button').onclick=()=>d.remove();$('variantRows').appendChild(d)};
+
+$('productForm').onsubmit=async e=>{
+  e.preventDefault();
+  try{
+    let id=$('pid').value,old=S.products.find(x=>x.id===id),image=old?.image_url||null;
+    if($('pimage').files[0])image=await upload($('pimage').files[0],'products',$('pname').value);
+    let p={name:$('pname').value.trim(),category_id:$('pcat').value,price:Number($('pprice').value||0),image_url:image,description:$('pdesc').value.trim()||null,stock_quantity:Number($('pstock').value||0),unit:$('punit').value.trim()||null,is_available:$('pavailable').checked,is_featured:$('pfeatured').checked,has_variants:$('pvariants').checked,updated_at:new Date().toISOString()};
+    let r=id?await db.from('products').update(p).eq('id',id):await db.from('products').insert(p);
+    if(r.error)throw r.error;
+    localStorage.setItem('low_'+(id||slug(p.name)),$('plow').value);
+    $('productModal').classList.remove('show');
+    await loadProducts();
+    await loadDash();
+  }catch(x){
+    $('productError').textContent=x.message;
+    $('productError').classList.remove('hidden');
+  }
+};
+
+async function loadInventory(){
+  if(!S.products.length)await loadProducts();
+  $('inventoryRows').innerHTML=S.products.map(p=>{let l=Number(localStorage.getItem('low_'+p.id)||5),s=Number(p.stock_quantity||0);return`<tr><td>${esc(p.name)}</td><td>${esc(cname(p.category_id))}</td><td>${s}</td><td>${l}</td><td><span class="badge ${s<=l?'low':'active'}">${s<=l?'Low Stock':'OK'}</span></td><td><button class=btn onclick="editProduct('${p.id}')">Edit</button></td></tr>`}).join('')||'<tr><td colspan=6 class=empty>No inventory found.</td></tr>';
+}
+
+async function loadOrders() { await generic('orders','orderRows',5); }
+
+async function loadPayments() {
+  const sVal = $('payStartDate').value;
+  const eVal = $('payEndDate').value;
+  
+  let start = new Date(sVal || todayStr);
+  start.setHours(0, 0, 0, 0);
+  
+  let end = new Date(eVal || todayStr);
+  end.setHours(23, 59, 59, 999);
+
+  $('paymentRows').innerHTML = '<tr><td colspan=7 class=empty>Loading payments data...</td></tr>';
+
+  try {
+    const { data, error } = await db
+      .from('payments')
+      .select('*')
+      .gte('created_at', start.toISOString())
+      .lte('created_at', end.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    S.payments = data || [];
+    
+    if (S.payments.length === 0) {
+      $('paymentRows').innerHTML = '<tr><td colspan=7 class=empty>No payments found for selected date range.</td></tr>';
+      return;
+    }
+
+    $('paymentRows').innerHTML = S.payments.map(p => {
+      const pDate = p.created_at ? new Date(p.created_at).toISOString().split('T')[0] : '—';
+      const amt = money(p.amount ?? p.total ?? 0);
+      return `
+        <tr>
+          <td>${pDate}</td>
+          <td><b>${esc(p.id)}</b></td>
+          <td>${esc(p.order_id || p.customer_name || '—')}</td>
+          <td>${esc(p.payment_method || p.method || 'Online')}</td>
+          <td><b>${amt}</b></td>
+          <td><span class="badge active">${esc(p.status || 'Success')}</span></td>
+          <td class="action-column">
+            <button class="btn secondary" style="padding:4px 10px;font-size:12px;" onclick="openPaymentReceipt('${p.id}')">View Receipt</button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+  } catch (err) {
+    $('paymentRows').innerHTML = `<tr><td colspan=7 class=empty>${esc(err.message)}</td></tr>`;
+  }
+}
+
+window.openPaymentReceipt = async (id) => {
+  const p = S.payments.find(x => String(x.id) === String(id));
+
+  if (!p) {
+    showAutoAlert('Payment not found', 2000);
+    return;
+  }
+
+  const body = $('receiptModalBody');
+
+  body.innerHTML = `
+    <div style="padding:30px;text-align:center;color:#64748b;">
+      Loading receipt...
+    </div>
+  `;
+
+  $('receiptModal').classList.add('show');
+
+  try {
+    let customerReceiptImg = null;
+    let receiptData = null;
+
+    // 1) First look inside payment record itself
+    customerReceiptImg =
+      p.receipt_url ||
+      p.file_url ||
+      p.proof_image ||
+      p.image_url ||
+      null;
+
+    // 2) Main source: payment_receipts table by payment_id
+    if (!customerReceiptImg) {
+      const { data, error } = await db
+        .from('payment_receipts')
+        .select('*')
+        .eq('payment_id', p.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error('payment_receipts lookup by payment_id error:', error);
+      }
+
+      if (data) {
+        receiptData = data;
+        customerReceiptImg =
+          data.receipt_url ||
+          data.file_url ||
+          data.image_url ||
+          null;
+      }
+    }
+
+    // 3) Fallback: payment_receipts table by order_id
+    if (!customerReceiptImg && p.order_id) {
+      const { data, error } = await db
+        .from('payment_receipts')
+        .select('*')
+        .eq('order_id', p.order_id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle();
+
+      if (error) {
+        console.error('payment_receipts lookup by order_id error:', error);
+      }
+
+      if (data) {
+        receiptData = data;
+        customerReceiptImg =
+          data.receipt_url ||
+          data.file_url ||
+          data.image_url ||
+          null;
+      }
+    }
+
+    // 4) Last fallback: orders table
+    if (!customerReceiptImg && p.order_id) {
+      const { data: ord, error: orderError } = await db
+        .from('orders')
+        .select('*')
+        .eq('id', p.order_id)
+        .maybeSingle();
+
+      if (orderError) {
+        console.error('orders receipt lookup error:', orderError);
+      }
+
+      if (ord) {
+        customerReceiptImg =
+          ord.receipt_url ||
+          ord.file_url ||
+          ord.proof_image ||
+          ord.image_url ||
+          null;
+      }
+    }
+
+    const pDate = p.created_at
+      ? new Date(p.created_at).toLocaleString('en-MY', { timeZone: 'Asia/Kuala_Lumpur' })
+      : '—';
+
+    const verificationStatus = receiptData?.verification_status || '—';
+    const fileName = receiptData?.file_name || '—';
+
+    body.innerHTML = `
+      <div style="display:grid;gap:10px;font-size:14px;">
+        <div><strong>Payment ID:</strong> ${esc(p.id)}</div>
+        <div><strong>Order ID:</strong> ${esc(p.order_id || '—')}</div>
+        <div><strong>Amount Paid:</strong> <span style="color:#2563eb;font-weight:bold;">${money(p.amount ?? p.total ?? 0)}</span></div>
+        <div><strong>Method:</strong> ${esc(p.payment_method || p.method || 'Online')}</div>
+        <div><strong>Transaction ID:</strong> ${esc(p.transaction_id || p.txn_id || 'N/A')}</div>
+        <div><strong>Date & Time:</strong> ${esc(pDate)}</div>
+        <div><strong>Payment Status:</strong> <span class="badge active">${esc(p.status || 'Success')}</span></div>
+
+        ${receiptData ? `
+          <div><strong>Receipt File:</strong> ${esc(fileName)}</div>
+          <div><strong>Verification:</strong> ${esc(verificationStatus)}</div>
+        ` : ''}
+
+        <div style="margin-top:12px;border-top:1px solid #e5e7eb;padding-top:12px;">
+          <label class="label" style="font-size:13px;font-weight:bold;color:#1e293b;display:block;margin-bottom:8px;">
+            📷 Customer Uploaded Receipt Image:
+          </label>
+
+          ${customerReceiptImg ? `
+            <div style="width:100%;background:#f8fafc;border:1px solid #cbd5e1;border-radius:12px;padding:8px;text-align:center;">
+              <a href="${esc(customerReceiptImg)}" target="_blank" rel="noopener noreferrer" title="Click to view full image">
+                <img
+                  src="${esc(customerReceiptImg)}"
+                  style="display:block;width:100%;height:auto;max-height:450px;object-fit:contain;margin:auto;border-radius:8px;"
+                  alt="Customer Receipt"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='block';"
+                >
+                <div style="display:none;padding:20px;color:#dc2626;font-weight:bold;">
+                  Image preview failed.<br>Click here to open receipt.
+                </div>
+              </a>
+            </div>
+            <div style="margin-top:10px;text-align:center;">
+              <a href="${esc(customerReceiptImg)}" target="_blank" rel="noopener noreferrer" class="btn primary" style="display:inline-block;text-decoration:none;">
+                🔍 Open Full Receipt
+              </a>
+            </div>
+          ` : `
+            <div style="padding:16px;text-align:center;background:#f1f5f9;border-radius:8px;color:#64748b;font-size:13px;">
+              No receipt image found for this payment.
+            </div>
+          `}
+        </div>
+      </div>
+    `;
+  } catch (err) {
+    console.error('Receipt view error:', err);
+    body.innerHTML = `
+      <div style="padding:20px;background:#fee2e2;color:#991b1b;border-radius:10px;">
+        <b>Unable to load receipt.</b><br><br>
+        ${esc(err.message || 'Unknown error')}
+      </div>
+    `;
+  }
+};
+
+async function downloadPaymentsPdf() {
+  if (!S.payments || S.payments.length === 0) {
+    showAutoAlert("No Transaction", 2000);
+    return;
+  }
+
+  if (!S.storeProfile) {
+    try {
+      const { data } = await db.from('store_profile').select('*').limit(1).maybeSingle();
+      if (data) S.storeProfile = data;
+    } catch(e){}
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+
+  const fromDate = $('payStartDate').value;
+  const toDate = $('payEndDate').value;
+
+  const storeName = S.storeProfile?.store_name || $('stName')?.value || 'Pasarraya Hameeds';
+  const storeAddr = S.storeProfile?.address || $('stAddress')?.value || '';
+  const storePhone = S.storeProfile?.phone || $('stPhone')?.value || '';
+
+  let currentY = 15;
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(storeName, 14, currentY);
+  currentY += 6;
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  if (storeAddr) {
+    const splitAddr = doc.splitTextToSize(storeAddr, 180);
+    doc.text(splitAddr, 14, currentY);
+    currentY += (splitAddr.length * 4) + 1;
+  }
+  if (storePhone) {
+    doc.text(`Phone: ${storePhone}`, 14, currentY);
+    currentY += 5;
+  }
+
+  currentY += 2;
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(14, currentY, 196, currentY);
+  currentY += 7;
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Payment Statement", 14, currentY);
+  currentY += 5;
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Date Range: ${fromDate} to ${toDate}`, 14, currentY);
+  currentY += 6;
+
+  doc.autoTable({
+    html: '#paymentsTable',
+    startY: currentY,
+    columns: [0, 1, 2, 3, 4, 5],
+    styles: { fontSize: 9 },
+    headStyles: { fillColor: [37, 99, 235] }
+  });
+
+  doc.save(`Payment_Report_${fromDate}_to_${toDate}.pdf`);
+}
+
+async function printPayments() {
+  if (!S.payments || S.payments.length === 0) {
+    showAutoAlert("No Transaction", 2000);
+    return;
+  }
+
+  if (!S.storeProfile) {
+    try {
+      const { data } = await db.from('store_profile').select('*').limit(1).maybeSingle();
+      if (data) S.storeProfile = data;
+    } catch(e){}
+  }
+
+  const fromDate = $('payStartDate').value;
+  const toDate = $('payEndDate').value;
+
+  const storeName = S.storeProfile?.store_name || $('stName')?.value || 'Pasarraya Hameeds';
+  const storeAddr = S.storeProfile?.address || $('stAddress')?.value || '';
+  const storePhone = S.storeProfile?.phone || $('stPhone')?.value || '';
+  const logoUrl = S.storeProfile?.logo_url || '';
+
+  let printArea = document.getElementById('printArea');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'printArea';
+    document.body.appendChild(printArea);
+  }
+
+  const rowsHtml = S.payments.map(p => {
+    const pDate = p.created_at ? new Date(p.created_at).toISOString().split('T')[0] : '—';
+    const amt = money(p.amount ?? p.total ?? 0);
+    return `
+      <tr>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${pDate}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;"><b>${esc(p.id)}</b></td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(p.order_id || p.customer_name || '—')}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(p.payment_method || p.method || 'Online')}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;"><b>${amt}</b></td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(p.status || 'Success')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  printArea.innerHTML = `
+    <div style="font-family:Arial,sans-serif;color:#000;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #ccc;padding-bottom:8px;margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0 0 4px 0;font-size:18px;">${esc(storeName)}</h2>
+          ${storeAddr ? `<p style="margin:2px 0;font-size:11px;">${esc(storeAddr)}</p>` : ''}
+          ${storePhone ? `<p style="margin:2px 0;font-size:11px;">Phone: ${esc(storePhone)}</p>` : ''}
+        </div>
+        ${logoUrl ? `<img src="${esc(logoUrl)}" style="max-height:50px;max-width:100px;object-fit:contain;">` : ''}
+      </div>
+      
+      <div style="margin-bottom:12px;">
+        <h3 style="margin:0 0 4px 0;font-size:14px;">Payment Statement</h3>
+        <p style="margin:0;font-size:11px;color:#444;">Date Range: ${esc(fromDate)} to ${esc(toDate)}</p>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;text-align:left;">
+        <thead>
+          <tr style="background:#2563eb;color:#fff;">
+            <th style="padding:6px;font-size:11px;">Date</th>
+            <th style="padding:6px;font-size:11px;">Payment ID</th>
+            <th style="padding:6px;font-size:11px;">Order ID</th>
+            <th style="padding:6px;font-size:11px;">Method</th>
+            <th style="padding:6px;font-size:11px;">Amount</th>
+            <th style="padding:6px;font-size:11px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  window.print();
+}
+
+$('applyPayFilter').onclick = loadPayments;
+$('downloadPaymentsPdf').onclick = downloadPaymentsPdf;
+$('printPayments').onclick = printPayments;
+$('refreshPayments').onclick = loadPayments;
+
+async function loadReports() {
+  const type = $('reportFilterType').value;
+  $('customDateContainer').style.display = (type === 'custom') ? 'flex' : 'none';
+
+  let start = new Date();
+  let end = new Date();
+
+  if (type === 'today') {
+    start.setHours(0, 0, 0, 0);
+    end.setHours(23, 59, 59, 999);
+  } else if (type === 'month') {
+    start = new Date(start.getFullYear(), start.getMonth(), 1, 0, 0, 0, 0);
+    end = new Date(start.getFullYear(), start.getMonth() + 1, 0, 23, 59, 59, 999);
+  } else if (type === 'year') {
+    start = new Date(start.getFullYear(), 0, 1, 0, 0, 0, 0);
+    end = new Date(start.getFullYear(), 11, 31, 23, 59, 59, 999);
+  } else if (type === 'custom') {
+    const sVal = $('reportStartDate').value;
+    const eVal = $('reportEndDate').value;
+    if (sVal) {
+      start = new Date(sVal);
+      start.setHours(0, 0, 0, 0);
+    } else {
+      start.setHours(0, 0, 0, 0);
+    }
+    if (eVal) {
+      end = new Date(eVal);
+      end.setHours(23, 59, 59, 999);
+    } else {
+      end.setHours(23, 59, 59, 999);
+    }
+  }
+
+  $('reportRows').innerHTML = '<tr><td colspan=11 class=empty>Loading sales statement...</td></tr>';
+
+  try {
+    const { data, error } = await db
+      .from('orders')
+      .select('*')
+      .gte('created_at', start.toISOString())
+      .lte('created_at', end.toISOString())
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const orders = data || [];
+    S.reports = orders;
+
+    let totalSales = 0;
+    orders.forEach(o => {
+      totalSales += Number(o.total || o.total_amount || 0);
+    });
+
+    const totalOrders = orders.length;
+    const avgSales = totalOrders > 0 ? (totalSales / totalOrders) : 0;
+
+    $('repTotalSales').textContent = money(totalSales);
+    $('repTotalOrders').textContent = totalOrders;
+    $('repAvgSales').textContent = money(avgSales);
+
+    $('reportRows').innerHTML = orders.map(x => `
+      <tr>
+        <td><b>${esc(x.id || '—')}</b></td>
+        <td>${x.created_at ? new Date(x.created_at).toLocaleString() : '—'}</td>
+        <td>${esc(x.customer_name || x.user_name || 'Customer')}</td>
+        <td>${esc(x.phone || x.customer_phone || '—')}</td>
+        <td>${esc(x.payment_method || x.method || 'Cash / Online')}</td>
+        <td>${money(x.subtotal || x.total || 0)}</td>
+        <td>${money(x.discount || 0)}</td>
+        <td>${money(x.delivery_fee || 0)}</td>
+        <td><b>${money(x.total ?? x.total_amount ?? 0)}</b></td>
+        <td><span class="badge active">${esc(x.status || 'completed')}</span></td>
+        <td class="action-column"><button class="btn secondary" style="padding:4px 8px;font-size:11px" onclick="alert('Order Details for Order ID: ${esc(x.id)}')">View</button></td>
+      </tr>
+    `).join('') || '<tr><td colspan=11 class=empty>No sales records found for selected period.</td></tr>';
+
+  } catch (err) {
+    $('reportRows').innerHTML = `<tr><td colspan=11 class=empty>${esc(err.message)}</td></tr>`;
+  }
+}
+
+async function downloadReportsPdf() {
+  if (!S.reports || S.reports.length === 0) {
+    showAutoAlert("No Data to Export", 2000);
+    return;
+  }
+
+  if (!S.storeProfile) {
+    try {
+      const { data } = await db.from('store_profile').select('*').limit(1).maybeSingle();
+      if (data) S.storeProfile = data;
+    } catch(e){}
+  }
+
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape' });
+
+  const type = $('reportFilterType').value;
+  let dateText = type === 'custom' ? `${$('reportStartDate').value} to ${$('reportEndDate').value}` : type.toUpperCase();
+
+  const storeName = S.storeProfile?.store_name || $('stName')?.value || 'Pasarraya Hameeds';
+  const storeAddr = S.storeProfile?.address || $('stAddress')?.value || '';
+  const storePhone = S.storeProfile?.phone || $('stPhone')?.value || '';
+
+  let currentY = 15;
+
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.text(storeName, 14, currentY);
+  currentY += 6;
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  if (storeAddr) {
+    const splitAddr = doc.splitTextToSize(storeAddr, 260);
+    doc.text(splitAddr, 14, currentY);
+    currentY += (splitAddr.length * 4) + 1;
+  }
+  if (storePhone) {
+    doc.text(`Phone: ${storePhone}`, 14, currentY);
+    currentY += 5;
+  }
+
+  currentY += 2;
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.5);
+  doc.line(14, currentY, 280, currentY);
+  currentY += 7;
+
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Sales Report & Statement", 14, currentY);
+  currentY += 5;
+
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Period: ${dateText}`, 14, currentY);
+  currentY += 6;
+
+  doc.autoTable({
+    html: '#reportsTable',
+    startY: currentY,
+    columns: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    styles: { fontSize: 8 },
+    headStyles: { fillColor: [37, 99, 235] }
+  });
+
+  doc.save(`Sales_Report_${dateText.replace(/\s+/g, '_')}.pdf`);
+}
+
+async function printReports() {
+  if (!S.reports || S.reports.length === 0) {
+    showAutoAlert("No Data to Export", 2000);
+    return;
+  }
+
+  if (!S.storeProfile) {
+    try {
+      const { data } = await db.from('store_profile').select('*').limit(1).maybeSingle();
+      if (data) S.storeProfile = data;
+    } catch(e){}
+  }
+
+  const type = $('reportFilterType').value;
+  let dateText = type === 'custom' ? `${$('reportStartDate').value} to ${$('reportEndDate').value}` : type.toUpperCase();
+
+  const storeName = S.storeProfile?.store_name || $('stName')?.value || 'Pasarraya Hameeds';
+  const storeAddr = S.storeProfile?.address || $('stAddress')?.value || '';
+  const storePhone = S.storeProfile?.phone || $('stPhone')?.value || '';
+  const logoUrl = S.storeProfile?.logo_url || '';
+
+  let printArea = document.getElementById('printArea');
+  if (!printArea) {
+    printArea = document.createElement('div');
+    printArea.id = 'printArea';
+    document.body.appendChild(printArea);
+  }
+
+  const rowsHtml = S.reports.map(x => {
+    const oDate = x.created_at ? new Date(x.created_at).toLocaleString() : '—';
+    return `
+      <tr>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;"><b>${esc(x.id || '—')}</b></td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${oDate}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(x.customer_name || x.user_name || 'Customer')}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(x.phone || x.customer_phone || '—')}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(x.payment_method || x.method || 'Cash / Online')}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${money(x.subtotal || x.total || 0)}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${money(x.discount || 0)}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${money(x.delivery_fee || 0)}</td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;"><b>${money(x.total ?? x.total_amount ?? 0)}</b></td>
+        <td style="padding:6px;border-bottom:1px solid #ddd;font-size:11px;">${esc(x.status || 'completed')}</td>
+      </tr>
+    `;
+  }).join('');
+
+  printArea.innerHTML = `
+    <div style="font-family:Arial,sans-serif;color:#000;width:100%;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid #ccc;padding-bottom:8px;margin-bottom:10px;">
+        <div>
+          <h2 style="margin:0 0 4px 0;font-size:18px;">${esc(storeName)}</h2>
+          ${storeAddr ? `<p style="margin:2px 0;font-size:11px;">${esc(storeAddr)}</p>` : ''}
+          ${storePhone ? `<p style="margin:2px 0;font-size:11px;">Phone: ${esc(storePhone)}</p>` : ''}
+        </div>
+        ${logoUrl ? `<img src="${esc(logoUrl)}" style="max-height:50px;max-width:100px;object-fit:contain;">` : ''}
+      </div>
+      
+      <div style="margin-bottom:12px;">
+        <h3 style="margin:0 0 4px 0;font-size:14px;">Sales Report & Statement</h3>
+        <p style="margin:0;font-size:11px;color:#444;">Period: ${esc(dateText)}</p>
+      </div>
+
+      <table style="width:100%;border-collapse:collapse;text-align:left;">
+        <thead>
+          <tr style="background:#2563eb;color:#fff;">
+            <th style="padding:6px;font-size:11px;">Order ID</th>
+            <th style="padding:6px;font-size:11px;">Date & Time</th>
+            <th style="padding:6px;font-size:11px;">Customer</th>
+            <th style="padding:6px;font-size:11px;">Phone</th>
+            <th style="padding:6px;font-size:11px;">Method</th>
+            <th style="padding:6px;font-size:11px;">Subtotal</th>
+            <th style="padding:6px;font-size:11px;">Discount</th>
+            <th style="padding:6px;font-size:11px;">Delivery</th>
+            <th style="padding:6px;font-size:11px;">Total</th>
+            <th style="padding:6px;font-size:11px;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rowsHtml}
+        </tbody>
+      </table>
+    </div>
+  `;
+
+  window.print();
+}
+
+function downloadReportsCsv() {
+  if (!S.reports || S.reports.length === 0) {
+    showAutoAlert("No Data to Export", 2000);
+    return;
+  }
+
+  const headers = ['Order ID', 'Date & Time', 'Customer Name', 'Phone', 'Payment Method', 'Subtotal', 'Discount', 'Delivery Fee', 'Total Amount', 'Status'];
+  const q = x => '"' + String(x ?? '').replace(/"/g, '""') + '"';
+
+  const rows = S.reports.map(x => [
+    x.id || '',
+    x.created_at ? new Date(x.created_at).toLocaleString() : '',
+    x.customer_name || x.user_name || 'Customer',
+    x.phone || x.customer_phone || '',
+    x.payment_method || x.method || 'Cash / Online',
+    x.subtotal || x.total || 0,
+    x.discount || 0,
+    x.delivery_fee || 0,
+    x.total ?? x.total_amount ?? 0,
+    x.status || 'completed'
+  ]);
+
+  const csvContent = [headers, ...rows].map(r => r.map(q).join(',')).join('\n');
+  const type = $('reportFilterType').value;
+  const fileName = `Sales_Report_${type}_${new Date().toISOString().split('T')[0]}.csv`;
+  download(fileName, csvContent);
+}
+
+$('reportFilterType').onchange = () => {
+  if ($('reportFilterType').value === 'custom') {
+    $('customDateContainer').style.display = 'flex';
+  } else {
+    $('customDateContainer').style.display = 'none';
+    loadReports();
+  }
+};
+$('applyReportFilter').onclick = loadReports;
+$('downloadReportsCsv').onclick = downloadReportsCsv;
+$('downloadReportsPdf').onclick = downloadReportsPdf;
+$('printReports').onclick = printReports;
+$('refreshReports').onclick = loadReports;
+
+const todayStr = new Date().toISOString().split('T')[0];
+$('reportStartDate').value = todayStr;
+$('reportEndDate').value = todayStr;
+$('payStartDate').value = todayStr;
+$('payEndDate').value = todayStr;
+
+async function loadStaff(){
+  $('staffRows').innerHTML='<tr><td colspan=7 class=empty>Loading staff list...</td></tr>';
+  try {
+    const { data, error } = await db.from('profiles').select('*');
+    if(error) throw error;
+    
+    S.staff = data || [];
+    $('staffRows').innerHTML = S.staff.map(s => `
+      <tr>
+        <td><b>${esc(s.full_name || 'Unnamed')}</b></td>
+        <td>${esc(s.username || '—')}</td>
+        <td>${esc(s.email || '—')}</td>
+        <td>${esc(s.phone || '—')}</td>
+        <td><span class="badge active">${esc(s.role || 'staff')}</span></td>
+        <td><span class="badge ${s.status === 'active' ? 'active' : 'inactive'}">${esc(s.status || 'active')}</span></td>
+        <td><button class="btn secondary" onclick="editStaff('${s.id}')">Edit</button></td>
+      </tr>
+    `).join('') || '<tr><td colspan=7 class=empty>No staff found.</td></tr>';
+  } catch(err) {
+    $('staffRows').innerHTML = `<tr><td colspan=7 class=empty>${esc(err.message || 'Failed to load staff list.')}</td></tr>`;
+  }
+}
+
+$('refreshStaff') && ($('refreshStaff').onclick = loadStaff);
+
+$('addStaff').onclick=()=>{
+  $('sid').value='';$('sname').value='';$('suser').value='';$('semail').value='';$('sphone').value='';$('srole').value='cashier';$('sstatus').value='active';$('spass').value='';$('staffError').classList.add('hidden');$('staffModal').classList.add('show')
+};
+
+window.editStaff=id=>{
+  let s=S.staff.find(x=>x.id===id);if(!s)return;
+  $('sid').value=s.id;$('sname').value=s.full_name||'';$('suser').value=s.username||'';$('semail').value=s.email||'';$('sphone').value=s.phone||'';$('srole').value=s.role||'cashier';$('sstatus').value=s.status||'active';$('spass').value='';$('staffError').classList.add('hidden');$('staffModal').classList.add('show')
+};
+
+$('staffForm').onsubmit=async e=>{
+  e.preventDefault();
+  $('staffError').classList.add('hidden');
+  try{
+    let id=$('sid').value, old=S.staff.find(x=>x.id===id), pic=old?.profile_picture_url||null;
+    if($('spic').files[0]) pic=await upload($('spic').files[0],'images',$('sname').value);
+    
+    let p={
+      full_name:$('sname').value.trim(),
+      email:$('semail').value.trim()||null,
+      phone:$('sphone').value.trim()||null,
+      username:$('suser').value.trim()||null,
+      role:$('srole').value,
+      status:$('sstatus').value,
+      profile_picture_url:pic,
+      updated_at:new Date().toISOString()
+    };
+    
+    if($('spass').value) p.password_hash=$('spass').value;
+    
+    let r;
+    if(id){
+      r=await db.from('profiles').update(p).eq('id',id);
+    }else{
+      p.id = crypto.randomUUID();
+      r=await db.from('profiles').insert(p);
+    }
+    
+    if(r.error) throw r.error;
+    $('staffModal').classList.remove('show');
+    await loadStaff();
+    await loadDash();
+    alert('Staff account saved successfully!');
+  }catch(x){
+    $('staffError').textContent='Staff save failed: '+(x.message||x);
+    $('staffError').classList.remove('hidden');
+  }
+};
+
+async function fetchAddressFromCoords(lat, lng) {
+  $('stLat').value = lat.toFixed(6);
+  $('stLon').value = lng.toFixed(6);
+  try {
+    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=en`);
+    const data = await res.json();
+    if (data && data.address) {
+      $('stAddress').value = data.display_name || '';
+      $('stCity').value = data.address.city || data.address.town || data.address.village || data.address.county || '';
+      $('stState').value = data.address.state || '';
+      $('stPostcode').value = data.address.postcode || '';
+      $('stCountry').value = data.address.country || 'Malaysia';
+    }
+  } catch (err) {
+    console.error("Geocoding failed:", err);
+  }
+}
+
+function initStoreMap(lat, lng) {
+  if (!storeMap) {
+    storeMap = L.map('map').setView([lat, lng], 14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(storeMap);
+
+    storeMarker = L.marker([lat, lng], { draggable: true }).addTo(storeMap);
+
+    storeMap.on('click', function(e) {
+      const { lat, lng } = e.latlng;
+      storeMarker.setLatLng([lat, lng]);
+      fetchAddressFromCoords(lat, lng);
+    });
+
+    storeMarker.on('dragend', function() {
+      const pos = storeMarker.getLatLng();
+      fetchAddressFromCoords(pos.lat, pos.lng);
+    });
+  } else {
+    storeMap.setView([lat, lng], 14);
+    storeMarker.setLatLng([lat, lng]);
+  }
+  setTimeout(() => storeMap.invalidateSize(), 200);
+}
+
+async function loadStoreSettings(){
+  try{
+    const { data, error } = await db.from('store_profile').select('*').limit(1).maybeSingle();
+    if (error) throw error;
+    
+    let lat = 2.7533, lon = 101.7042;
+    if (data) {
+      S.storeProfile = data;
+      $('stName').value = data.store_name || data.name || 'Pasarraya Hameeds';
+      $('stTagline').value = data.store_tagline || data.tagline || '';
+      $('stAddress').value = data.address || data.full_address || '';
+      $('stCity').value = data.city || '';
+      $('stState').value = data.state || '';
+      $('stPostcode').value = data.postcode || '';
+      $('stCountry').value = data.country || 'Malaysia';
+      $('stPhone').value = data.phone || '';
+      $('stWhatsapp').value = data.whatsapp || '';
+      $('stEmail').value = data.email || '';
+      $('stHours').value = data.business_hours || data.hours || '';
+      $('stBaseFee').value = data.base_delivery_fee ?? 7.00;
+      $('stFreeKm').value = data.free_delivery_km ?? 2.0;
+      $('stPerKmFee').value = data.per_km_fee ?? 1.00;
+      $('stLogoCurrent').textContent = data.logo_url ? 'Current logo saved in database.' : '';
+      
+      if (data.store_lat !== undefined && data.store_lon !== undefined && data.store_lat !== null) {
+        lat = parseFloat(data.store_lat);
+        lon = parseFloat(data.store_lon);
+      } else if (data.latitude !== undefined && data.longitude !== undefined && data.latitude !== null) {
+        lat = parseFloat(data.latitude);
+        lon = parseFloat(data.longitude);
+      }
+    }
+    $('stLat').value = lat;
+    $('stLon').value = lon;
+    initStoreMap(lat, lon);
+  } catch(err){
+    console.error("Store profile load failed:", err);
+  }
+}
+
+async function handleSaveStore(e) {
+  if (e) e.preventDefault();
+  const msg = $('storeMsg');
+  msg.className = 'notice'; msg.textContent = 'Saving store profile...'; msg.classList.remove('hidden');
+  
+  try {
+    let logoUrl = S.storeProfile?.logo_url || null;
+    if ($('stLogoFile').files[0]) {
+      logoUrl = await upload($('stLogoFile').files[0], 'images', 'store-logo');
+    }
+
+    const currentId = S.storeProfile?.id || 1;
+
+    const payload = {
+      id: currentId,
+      store_name: $('stName').value.trim(),
+      store_tagline: $('stTagline').value.trim() || null,
+      address: $('stAddress').value.trim() || null,
+      city: $('stCity').value.trim() || null,
+      state: $('stState').value.trim() || null,
+      postcode: $('stPostcode').value.trim() || null,
+      country: $('stCountry').value.trim() || 'Malaysia',
+      phone: $('stPhone').value.trim() || null,
+      whatsapp: $('stWhatsapp').value.trim() || null,
+      email: $('stEmail').value.trim() || null,
+      business_hours: $('stHours').value.trim() || null,
+      store_lat: parseFloat($('stLat').value || 0),
+      store_lon: parseFloat($('stLon').value || 0),
+      base_delivery_fee: parseFloat($('stBaseFee').value || 7),
+      free_delivery_km: parseFloat($('stFreeKm').value || 2),
+      per_km_fee: parseFloat($('stPerKmFee').value || 1),
+      logo_url: logoUrl,
+      updated_at: new Date().toISOString()
+    };
+
+    const { error } = await db.from('store_profile').upsert(payload, { onConflict: 'id' });
+    if (error) throw error;
+
+    msg.className = 'notice ok';
+    msg.textContent = 'Store settings updated successfully!';
+    await loadStoreSettings();
+  } catch(err) {
+    msg.className = 'notice error';
+    msg.textContent = 'Failed to save settings: ' + (err.message || err);
+  }
+}
+
+$('saveStoreBtn').onclick = handleSaveStore;
+$('storeForm').onsubmit = handleSaveStore;
+
+async function loadBankSettings() {
+  $('bankRows').innerHTML = '<tr><td colspan=6 class=empty>Loading bank accounts...</td></tr>';
+  try {
+    const { data, error } = await db.from('bank_accounts').select('*').order('created_at', { ascending: false });
+    if (error) throw error;
+
+    const list = data || [];
+    $('bankRows').innerHTML = list.map(b => `
+      <tr>
+        <td style="text-align:center;">
+          <input type="radio" name="default_bank" ${b.is_default ? 'checked' : ''} onchange="setDefaultBankAccount('${b.id}')" style="width:18px;height:18px;cursor:pointer;">
+        </td>
+        <td><b>${esc(b.bank_name || b.bank_account_name || '—')}</b> ${b.is_default ? '<span class="badge active" style="font-size:10px;">DEFAULT</span>' : ''}</td>
+        <td>${esc(b.account_number || b.bank_account_number || '—')}</td>
+        <td>${esc(b.beneficiary_name || '—')}</td>
+        <td>
+          ${b.duitnow_qr_url ? `<img src="${esc(b.duitnow_qr_url)}" style="max-width:80px;max-height:80px;border-radius:8px;border:1px solid #d1d5db;padding:2px;background:#fff;display:block;margin-bottom:4px;" alt="DuitNow QR">` : '<span class="muted" style="font-size:12px;display:block;margin-bottom:4px;">No QR Uploaded</span>'}
+        </td>
+        <td>
+          <input type="file" id="qr_file_${b.id}" accept="image/*" style="display:none;" onchange="uploadBankQR('${b.id}', '${esc(b.duitnow_qr_url || '')}', this)">
+          <button type="button" class="btn secondary" style="padding:5px 10px;font-size:11px;margin-right:4px;" onclick="document.getElementById('qr_file_${b.id}').click()">
+            ${b.duitnow_qr_url ? '🔄 Change QR' : '⬆ Upload QR'}
+          </button>
+          <button type="button" class="btn danger" style="padding:5px 10px;font-size:11px" onclick="deleteBankAccount('${b.id}', '${esc(b.duitnow_qr_url || '')}')">Delete</button>
+        </td>
+      </tr>
+    `).join('') || '<tr><td colspan=6 class=empty>No bank accounts added yet.</td></tr>';
+  } catch(err) {
+    $('bankRows').innerHTML = `<tr><td colspan=6 class=empty>${esc(err.message)}</td></tr>`;
+  }
+}
+
+window.setDefaultBankAccount = async (selectedId) => {
+  try {
+    // ১. প্রথমে সমস্ত অ্যাকাউন্টগুলোর is_default = false করে দেওয়া হচ্ছে
+    await db.from('bank_accounts').update({ is_default: false }).neq('id', '00000000-0000-0000-0000-000000000000');
+    
+    // ২. নির্বাচিত অ্যাকাউন্টটির is_default = true করা হচ্ছে
+    const { error } = await db.from('bank_accounts').update({ is_default: true }).eq('id', selectedId);
+    if (error) throw error;
+
+    showAutoAlert('Default bank set!', 1500);
+    await loadBankSettings();
+  } catch(err) {
+    alert('Failed to set default bank: ' + (err.message || err));
+  }
+};
+
+$('bankAccountForm').onsubmit = async (e) => {
+  e.preventDefault();
+  const msg = $('bankMsg');
+  msg.className = 'notice'; msg.textContent = 'Saving bank account...'; msg.classList.remove('hidden');
+  try {
+    const payload = {
+      bank_name: $('bName').value.trim(),
+      account_number: $('bAccNum').value.trim(),
+      beneficiary_name: $('bBeneficiary').value.trim(),
+      is_default: false,
+      created_at: new Date().toISOString()
+    };
+    const { error } = await db.from('bank_accounts').insert(payload);
+    if (error) throw error;
+
+    msg.className = 'notice ok';
+    msg.textContent = 'Bank account added successfully!';
+    $('bankAccountForm').reset();
+    await loadBankSettings();
+  } catch(err) {
+    msg.className = 'notice error';
+    msg.textContent = 'Failed to add bank account: ' + (err.message || err);
+  }
+};
+
+window.uploadBankQR = async (accountId, oldImageUrl, inputEl) => {
+  const file = inputEl.files[0];
+  if (!file) return;
+
+  try {
+    if (oldImageUrl) {
+      try {
+        const parts = oldImageUrl.split('/storage/v1/object/public/' + BUCKET + '/');
+        if (parts[1]) {
+          await db.storage.from(BUCKET).remove([decodeURIComponent(parts[1])]);
+        }
+      } catch (e) {
+        console.warn('Failed to delete old QR code image:', e);
+      }
+    }
+
+    const newQrUrl = await upload(file, 'bank-qrs', 'qr-' + accountId);
+
+    const { error } = await db.from('bank_accounts').update({
+      duitnow_qr_url: newQrUrl,
+      updated_at: new Date().toISOString()
+    }).eq('id', accountId);
+
+    if (error) throw error;
+
+    alert('DuitNow QR Code updated successfully!');
+    await loadBankSettings();
+  } catch (err) {
+    alert('Failed to upload QR Code: ' + (err.message || err));
+  } finally {
+    inputEl.value = '';
+  }
+};
+
+window.deleteBankAccount = async (id, qrUrl) => {
+  if (!confirm('Are you sure you want to delete this bank account?')) return;
+  try {
+    if (qrUrl) {
+      try {
+        const parts = qrUrl.split('/storage/v1/object/public/' + BUCKET + '/');
+        if (parts[1]) {
+          await db.storage.from(BUCKET).remove([decodeURIComponent(parts[1])]);
+        }
+      } catch (e) {}
+    }
+
+    const { error } = await db.from('bank_accounts').delete().eq('id', id);
+    if (error) throw error;
+    await loadBankSettings();
+  } catch(err) {
+    alert('Failed to delete bank account: ' + (err.message || err));
+  }
+};
+
+$('refreshBank') && ($('refreshBank').onclick = loadBankSettings);
+
+async function generic(table,target,cols){
+  let{data,error}=await db.from(table).select('*').order('created_at',{ascending:false}).limit(200);
+  $(target).innerHTML=error?'<tr><td colspan='+cols+' class=empty>'+esc(error.message)+'</td></tr>':(data||[]).map(x=>`<tr><td>${esc(x.id)}</td><td>${esc(x.customer_name||x.order_id||'—')}</td><td>${esc(x.status||x.payment_method||x.method||'—')}</td><td>${money(x.total??x.amount??x.total_amount)}</td><td>${x.created_at?new Date(x.created_at).toLocaleString():'—'}</td></tr>`).join('')||`<tr><td colspan=${cols} class=empty>No records found.</td></tr>`;
+}
+
+function csvParse(t){let a=[],r=[],c='',q=false;for(let i=0;i<t.length;i++){let x=t[i],n=t[i+1];if(x=='"'){if(q&&n=='"'){c+='"';i++}else q=!q}else if(x==','&&!q){r.push(c);c=''}else if((x=='\n'||x=='\r')&&!q){if(x=='\r'&&n=='\n')i++;r.push(c);c='';if(r.some(v=>v.trim()))a.push(r);r=[]}else c+=x}if(c||r.length){r.push(c);a.push(r)}if(!a.length)return[];let h=a[0].map(x=>x.trim());return a.slice(1).map(x=>Object.fromEntries(h.map((k,i)=>[k,x[i]||''])))}
+function fld(o,n){let k=Object.keys(o),f=k.find(x=>norm(x)===norm(n));return f?o[f]:k.find(x=>norm(x).includes(norm(n)))?o[k.find(x=>norm(x).includes(norm(n)))]:''}
+async function csvRow(o){let name=fld(o,'name')||fld(o,'item')||fld(o,'product');if(!name)return'skip';let cat=fld(o,'category'),cid=null;if(cat){let c=S.categories.find(x=>norm(x.name)===norm(cat));if(c)cid=c.id;else{let z=await db.from('categories').insert({name:cat,is_active:true}).select('id').single();cid=z.data?.id||null}}let price=fld(o,'price'),stock=fld(o,'stock'),desc=fld(o,'description'),unit=fld(o,'unit'),f=await db.from('products').select('id').ilike('name',name.trim()).limit(1).maybeSingle(),p={name:name.trim(),category_id:cid,description:desc||null,unit:unit||null};if(price)p.price=Number(String(price).replace(/[^0-9.-]/g,''));if(stock)p.stock_quantity=Number(String(stock).replace(/[^0-9.-]/g,''));let r=f.data?await db.from('products').update({...p,updated_at:new Date().toISOString()}).eq('id',f.data.id):await db.from('products').insert(p);if(r.error)throw r.error;return f.data?'u':'i'}
+
+async function getPdfJs(){if(window.pdfjsLib)return window.pdfjsLib;if(window._pdfJsPromise)return window._pdfJsPromise;window._pdfJsPromise=import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs').then(m=>{m.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs';window.pdfjsLib=m;return m});return window._pdfJsPromise}
+function cleanPdfLine(s){return String(s||'').replace(/\u00ad/g,'').replace(/\s+/g,' ').trim()}
+function retailFromNumbers(nums){const start=nums.length>=11?1:0;for(let i=start;i<Math.min(start+4,nums.length);i++){const v=Number(nums[i]);if(Number.isFinite(v)&&v>0)return v}return 0}
+function normalizeProductName(s){return cleanPdfLine(s).replace(/[|]+/g,' ').replace(/\s+/g,' ').trim()}
+function detectCategory(name){
+ const raw=String(name||'').trim(); const n=norm(raw).replace(/[^a-z0-9]+/g,' ').replace(/\s+/g,' ').trim(); if(!n) return 'General Products';
+ const has=(...xs)=>xs.some(x=>n.includes(norm(x).replace(/[^a-z0-9]+/g,' ').trim()));
+ if(has('tomato paste','cili paste','chilli paste','curry paste','pes cili','pes tomato')) return 'Cooking Ingredients';
+ if(has('tomato sauce','chilli sauce','sos tomato','sos cili','oyster sauce','soy sauce','kicap')) return 'Sauces & Condiments';
+ if(has('curry powder','chilli powder','serbuk kari','serbuk cili','rempah')) return 'Herbs & Spices';
+ if(has('detergent','serbuk pencuci','sabun basuh','dishwash','pencuci lantai')) return 'Cleaning & Household';
+ if(has('toothpaste','shampoo','syampu','sabun mandi','body wash')) return 'Personal Care';
+ if(has('susu','milk','keju','cheese','yogurt','mentega','butter')) return 'Dairy';
+ if(has('beras','rice')) return 'Rice & Grains';
+ if(has('bihun','mee','noodle','pasta','spaghetti')) return 'Noodles & Pasta';
+ if(has('minyak masak','cooking oil')) return 'Cooking Oil & Fats';
+ if(has('biskut','biscuit','snack','kerepek','coklat','chocolate')) return 'Snacks & Confectionery';
+ return 'General Products';
+}
+
+async function extractPdfRows(file){
+ const pdfjs=await getPdfJs(),buf=await file.arrayBuffer(),pdf=await pdfjs.getDocument({data:buf}).promise,rows=[];
+ for(let pageNo=1;pageNo<=pdf.numPages;pageNo++){
+ const page=await pdf.getPage(pageNo),content=await page.getTextContent(), groups=new Map();
+ for(const it of content.items){
+ const text=cleanPdfLine(it.str);if(!text)continue;
+ const y=Math.round((it.transform?.[5]||0)*10)/10;
+ let key=y, target=groups.get(key);
+ if(!target){target={y,texts:[]};groups.set(key,target)}
+ target.texts.push({x:it.transform?.[4]||0,text});
+ }
+ const lines=[...groups.values()].sort((a,b)=>b.y-a.y).map(g=>g.texts.sort((a,b)=>a.x-b.x).map(x=>x.text).join(' ')).map(cleanPdfLine).filter(Boolean);
+ rows.push(...lines);
+ }
+ return rows;
+}
+
+function parsePdfProductLines(lines){
+ const out=[]; let pending=[], current=null, waitingContinuation=false;
+ const HEADER=/item\s*name|cost\s*price|retail\s*price/i, DECIMAL=/\d{1,6}[.,]\d{1,2}/g;
+ const flushCurrent=()=>{if(!current)return;const name=normalizeProductName(current.name),price=retailFromNumbers(current.prices.slice(0,11));if(name.length>=2 && price>0)out.push({name,price,category:detectCategory(name)});current=null;waitingContinuation=false};
+ for(const raw of lines){
+ const line=cleanPdfLine(raw);if(!line)continue;
+ if(HEADER.test(line)){flushCurrent();pending=[];continue}
+ const matches=[...line.matchAll(DECIMAL)];
+ if(matches.length>=10){
+ flushCurrent();const first=matches[0].index,prefix=line.slice(0,first).trim(),prices=matches.map(m=>Number(m[0].replace(',','.'))),nameParts=pending.slice();pending=[];
+ if(prefix&&/[A-Za-z]/.test(prefix))nameParts.push(prefix);
+ current={name:nameParts.join(' '),prices};waitingContinuation=!prefix;continue;
+ }
+ if(current&&waitingContinuation&&matches.length===0){current.name=(current.name+' '+line).trim();waitingContinuation=false}
+ else{pending.push(line)}
+ }
+ flushCurrent();return out;
+}
+
+async function importPdf(file){
+ const msg=$('csvMsg');msg.className='notice';msg.textContent='Reading PDF...';
+ const lines=await extractPdfRows(file),rows=parsePdfProductLines(lines);
+ if(!rows.length)throw Error('No product rows detected from PDF.');
+ const unique=[],seen=new Set();for(const r of rows){const k=norm(r.name);if(k&&!seen.has(k)){seen.add(k);unique.push(r)}}
+ const total=unique.length;let processed=0,inserted=0,updated=0,failed=0;
+ const existingProducts=await fetchAllRows('products','id,name','name'),productMap=new Map(existingProducts.map(x=>[norm(x.name),x.id]));
+ const existingCats=await fetchAllRows('categories','id,name','name');S.categories=existingCats;const catMap=new Map(existingCats.map(x=>[norm(x.name),x.id]));
+
+ const BATCH=100;
+ for(let i=0;i<unique.length;i+=BATCH){
+ const batch=unique.slice(i,i+BATCH),newRows=[],updates=[];
+ for(const row of batch){
+ const payload={name:row.name,category_id:catMap.get(norm(detectCategory(row.name)))||null,price:Number(row.price||0),updated_at:new Date().toISOString()};
+ const id=productMap.get(norm(row.name));
+ if(id) updates.push({id,payload}); else newRows.push({...payload,stock_quantity:0,is_available:true,is_featured:false,has_variants:false});
+ }
+ if(newRows.length){const r=await db.from('products').insert(newRows).select('id,name');if(!r.error){for(const x of (r.data||[]))productMap.set(norm(x.name),x.id);inserted+=newRows.length}}
+ for(const u of updates){try{await db.from('products').update(u.payload).eq('id',u.id);updated++}catch(e){failed++}}
+ processed=Math.min(i+BATCH,total);
+ msg.textContent=`Importing PDF products: ${processed}/${total} • New ${inserted} • Updated ${updated}`;
+ await new Promise(requestAnimationFrame);
+ }
+ await loadCategories();await loadProducts();await loadDash();
+ msg.textContent=`PDF import complete: ${inserted} new, ${updated} updated.`;msg.className='notice ok';
+}
+
+$('pdf').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{await importPdf(f)}catch(err){$('csvMsg').textContent='PDF import failed: '+err.message;$('csvMsg').className='notice error'}e.target.value=''};
+$('csv').onchange=async e=>{let f=e.target.files[0];if(!f)return;try{$('csvMsg').textContent='Reading CSV...';let rows=csvParse(await f.text()),i=0,u=0,s=0,total=rows.length,processed=0;for(let r of rows){let x=await csvRow(r);x==='i'?i++:x==='u'?u++:s++;processed++;if(processed%25===0||processed===total){$('csvMsg').textContent=`Importing CSV: ${processed}/${total}`;await new Promise(requestAnimationFrame)}}await loadCategories();await loadProducts();$('csvMsg').textContent=`CSV complete: Inserted ${i}, updated ${u}.`;$('csvMsg').className='notice ok'}catch(x){$('csvMsg').textContent=x.message;$('csvMsg').className='notice error'}e.target.value=''};
+
+function csvText(a){let h=['Name','Category','Price','Description','Stock','Unit','Available','Featured','Has Variants'];let q=x=>'"'+String(x??'').replace(/"/g,'""')+'"';return[h,...a.map(p=>[p.name,cname(p.category_id),p.price,p.description,p.stock_quantity,p.unit,p.is_available?'Yes':'No',p.is_featured?'Yes':'No',p.has_variants?'Yes':'No'])].map(r=>r.map(q).join(',')).join('\n')}
+function download(n,t){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([t],{type:'text/csv'}));a.download=n;a.click()}
+$('allCsv').onclick=()=>download('products-all.csv',csvText(S.products));
+$('oneCsv').onclick=()=>{let id=$('catCsv').value;if(!id)return alert('Select a category.');let c=S.categories.find(x=>x.id===id);download((slug(c.name)||'category')+'-products.csv',csvText(S.products.filter(x=>x.category_id===id)))};
+
+$('refreshDash').onclick=loadDash;
+$('refreshInventory').onclick=loadInventory;
+$('refreshProducts').onclick=loadProducts;
+$('refreshOrders').onclick=loadOrders;
+
+restore();
+</script></body></html>
